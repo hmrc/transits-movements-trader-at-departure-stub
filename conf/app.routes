@@ -1,3 +1,3 @@
 # microservice specific routes
 
-POST                    /message-notification                     controllers.DeparturesController.post
+POST                    /movements/departures                     controllers.DeparturesController.post
