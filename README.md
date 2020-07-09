@@ -5,10 +5,10 @@ This is a microservice for an internal API which provides a test stub for NCTS m
 
 This is a support API for the public Common Transit Convention Traders API.
 
-This mircoservice is in (Beta)[https://www.gov.uk/help/beta]. The signature may change. 
+This mircoservice is in [Beta](https://www.gov.uk/help/beta). The signature may change. 
 
 
-### Prerequisites    Speak to John/Rob
+### Prerequisites   
 - Scala 2.12.11
 - Java 8
 - sbt > 1.3.13
@@ -33,7 +33,7 @@ You can find helpful guides on the [HMRC Developer Hub](https://developer.servic
 
 ### Reporting Issues
 
-You can create a [GitHub issue](https://github.com/hmrc/common-transit-convention-traders/issues). Alternatively you can contact our Software Development Support team. Email them to receive a form where you can add details about your requirements and questions at sdsteam@hmr.gov.uk.
+You can create a [GitHub issue](https://github.com/hmrc/common-transit-convention-traders/issues). Alternatively you can contact our Software Development Support team. Email them at sdsteam@hmr.gov.uk, to receive a form where you can add details about your requirements and questions.
 
 ### License
 
