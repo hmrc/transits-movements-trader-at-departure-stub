@@ -12,6 +12,7 @@ This mircoservice is in [Beta](https://www.gov.uk/help/beta). The signature may 
 - Scala 2.12.11
 - Java 8
 - sbt > 1.3.13
+- MongoDB 3.6
 - [Service Manager](https://github.com/hmrc/service-manager)
 
 ### Development Setup
@@ -33,20 +34,17 @@ dependencyUpdatesReport | Writes a list of project dependencies to a file | ```$
 - [CTC Traders API roadmap](https://developer.service.hmrc.gov.uk/roadmaps/common-transit-convention-traders-roadmap) shows you what you can test now and our progress as we make more endpoints ready for test.
 - [CTC Traders API definitions](https://developer.service.hmrc.gov.uk/api-documentation/docs/api/service/common-transit-convention-traders/1.0) lets you see a list of our endpoints.
 
-### Helpful information
+## Related API documentation 
 
-You can find helpful guides on the [HMRC Developer Hub](https://developer.service.hmrc.gov.uk/api-documentation/docs/using-the-hub)
+- [Common Transit Convention Traders API definitions](https://github.com/hmrc/common-transit-convention-traders)
 
-### Reporting Issues
+## Helpful information
 
-You can create a [GitHub issue](https://github.com/hmrc/common-transit-convention-traders/issues). Alternatively you can contact our Software Development Support team. Email them at sdsteam@hmr.gov.uk, to receive a form where you can add details about your requirements and questions.
+Guides for the related public Common Transit Convention Traders API are on the [HMRC Developer Hub](https://developer.service.hmrc.gov.uk/api-documentation/docs/using-the-hub)
 
-### License
+## Reporting Issues
 
-This code is open source software licensed under the [Apache 2.0 License]("http://www.apache.org/licenses/LICENSE-2.0.html").
-
-
-This is a placeholder README.md for a new repository
+If you have any issues relating to the Common Transit Convention Traders API, please raise them through our [public API](https://github.com/hmrc/common-transit-convention-traders#reporting-issues).
 
 ### License
 
