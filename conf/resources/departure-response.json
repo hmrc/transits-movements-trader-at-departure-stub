@@ -1,0 +1,122 @@
+{
+  "departures": [{
+    "departureId": 22,
+    "eoriNumber": "GB12345",
+    "referenceNumber": "LRN123456",
+    "status": "DepartureSubmitted",
+    "created": "2020-09-09T09:35:16.392",
+    "updated": "2020-09-14T11:35:16.392",
+    "nextMessageCorrelationId": 2,
+    "messages": [
+      {
+        "dateTime": "2020-05-29T08:20:00.000Z",
+        "messageType": "IE007",
+        "message": "<CC007A><SynIdeMES1>UNOC</SynIdeMES1><SynVerNumMES2>3</SynVerNumMES2><MesSenMES3>LOCAL-A2100005</MesSenMES3><MesRecMES6>NCTS</MesRecMES6><DatOfPreMES9>20200529</DatOfPreMES9><TimOfPreMES10>0820</TimOfPreMES10><IntConRefMES11>AF202005291</IntConRefMES11><AppRefMES14>NCTS</AppRefMES14><TesIndMES18>0</TesIndMES18><MesIdeMES19>1</MesIdeMES19><MesTypMES20>GB007A</MesTypMES20><HEAHEA><DocNumHEA5>19IT02110010007827</DocNumHEA5><CusSubPlaHEA66>test</CusSubPlaHEA66><ArrNotPlaHEA60>NE12 7AE</ArrNotPlaHEA60><ArrNotPlaHEA60LNG>EN</ArrNotPlaHEA60LNG><ArrAgrLocCodHEA62>GB000244</ArrAgrLocCodHEA62><ArrAgrLocOfGooHEA63>BOSTON</ArrAgrLocOfGooHEA63><ArrAgrLocOfGooHEA63LNG>EN</ArrAgrLocOfGooHEA63LNG><SimProFlaHEA132>0</SimProFlaHEA132><ArrNotDatHEA141>20200529</ArrNotDatHEA141></HEAHEA><TRADESTRD><NamTRD7>test</NamTRD7><StrAndNumTRD22>55</StrAndNumTRD22><PosCodTRD23>NE12 7AE</PosCodTRD23><CitTRD24>Newcastle</CitTRD24><CouTRD25>GB</CouTRD25><NADLNGRD>EN</NADLNGRD><TINTRD59>GB000060</TINTRD59></TRADESTRD><CUSOFFPREOFFRES><RefNumRES1>GB000244</RefNumRES1></CUSOFFPREOFFRES></CC007A>",
+        "status": "SubmissionSucceeded",
+        "messageCorrelationId": 1
+      }
+    ]
+  }, {
+    "departureId": 23,
+    "eoriNumber": "GB12345",
+    "referenceNumber": "LRN123456",
+    "status": "MrnAllocated",
+    "created": "2020-09-09T09:35:16.392",
+    "updated": "2020-09-14T11:35:16.392",
+    "nextMessageCorrelationId": 2,
+    "messages": [
+      {
+        "dateTime": "2020-05-29T08:20:00.000Z",
+        "messageType": "IE007",
+        "message": "<CC007A><SynIdeMES1>UNOC</SynIdeMES1><SynVerNumMES2>3</SynVerNumMES2><MesSenMES3>LOCAL-A2100005</MesSenMES3><MesRecMES6>NCTS</MesRecMES6><DatOfPreMES9>20200529</DatOfPreMES9><TimOfPreMES10>0820</TimOfPreMES10><IntConRefMES11>AF202005291</IntConRefMES11><AppRefMES14>NCTS</AppRefMES14><TesIndMES18>0</TesIndMES18><MesIdeMES19>1</MesIdeMES19><MesTypMES20>GB007A</MesTypMES20><HEAHEA><DocNumHEA5>19IT02110010007827</DocNumHEA5><CusSubPlaHEA66>test</CusSubPlaHEA66><ArrNotPlaHEA60>NE12 7AE</ArrNotPlaHEA60><ArrNotPlaHEA60LNG>EN</ArrNotPlaHEA60LNG><ArrAgrLocCodHEA62>GB000244</ArrAgrLocCodHEA62><ArrAgrLocOfGooHEA63>BOSTON</ArrAgrLocOfGooHEA63><ArrAgrLocOfGooHEA63LNG>EN</ArrAgrLocOfGooHEA63LNG><SimProFlaHEA132>0</SimProFlaHEA132><ArrNotDatHEA141>20200529</ArrNotDatHEA141></HEAHEA><TRADESTRD><NamTRD7>test</NamTRD7><StrAndNumTRD22>55</StrAndNumTRD22><PosCodTRD23>NE12 7AE</PosCodTRD23><CitTRD24>Newcastle</CitTRD24><CouTRD25>GB</CouTRD25><NADLNGRD>EN</NADLNGRD><TINTRD59>GB000060</TINTRD59></TRADESTRD><CUSOFFPREOFFRES><RefNumRES1>GB000244</RefNumRES1></CUSOFFPREOFFRES></CC007A>",
+        "status": "SubmissionSucceeded",
+        "messageCorrelationId": 1
+      }
+    ]
+  }, {
+    "departureId": 24,
+    "eoriNumber": "GB12345",
+    "referenceNumber": "LRN123456",
+    "status": "ReleasedForTransit",
+    "created": "2020-09-09T09:35:16.392",
+    "updated": "2020-09-14T11:35:16.392",
+    "nextMessageCorrelationId": 2,
+    "messages": [
+      {
+        "dateTime": "2020-05-29T08:20:00.000Z",
+        "messageType": "IE007",
+        "message": "<CC007A><SynIdeMES1>UNOC</SynIdeMES1><SynVerNumMES2>3</SynVerNumMES2><MesSenMES3>LOCAL-A2100005</MesSenMES3><MesRecMES6>NCTS</MesRecMES6><DatOfPreMES9>20200529</DatOfPreMES9><TimOfPreMES10>0820</TimOfPreMES10><IntConRefMES11>AF202005291</IntConRefMES11><AppRefMES14>NCTS</AppRefMES14><TesIndMES18>0</TesIndMES18><MesIdeMES19>1</MesIdeMES19><MesTypMES20>GB007A</MesTypMES20><HEAHEA><DocNumHEA5>19IT02110010007827</DocNumHEA5><CusSubPlaHEA66>test</CusSubPlaHEA66><ArrNotPlaHEA60>NE12 7AE</ArrNotPlaHEA60><ArrNotPlaHEA60LNG>EN</ArrNotPlaHEA60LNG><ArrAgrLocCodHEA62>GB000244</ArrAgrLocCodHEA62><ArrAgrLocOfGooHEA63>BOSTON</ArrAgrLocOfGooHEA63><ArrAgrLocOfGooHEA63LNG>EN</ArrAgrLocOfGooHEA63LNG><SimProFlaHEA132>0</SimProFlaHEA132><ArrNotDatHEA141>20200529</ArrNotDatHEA141></HEAHEA><TRADESTRD><NamTRD7>test</NamTRD7><StrAndNumTRD22>55</StrAndNumTRD22><PosCodTRD23>NE12 7AE</PosCodTRD23><CitTRD24>Newcastle</CitTRD24><CouTRD25>GB</CouTRD25><NADLNGRD>EN</NADLNGRD><TINTRD59>GB000060</TINTRD59></TRADESTRD><CUSOFFPREOFFRES><RefNumRES1>GB000244</RefNumRES1></CUSOFFPREOFFRES></CC007A>",
+        "status": "SubmissionSucceeded",
+        "messageCorrelationId": 1
+      }
+    ]
+  }, {
+    "departureId": 25,
+    "eoriNumber": "GB12345",
+    "referenceNumber": "LRN123456",
+    "status": "TransitDeclarationRejected",
+    "created": "2020-09-09T09:35:16.392",
+    "updated": "2020-09-14T11:35:16.392",
+    "nextMessageCorrelationId": 2,
+    "messages": [
+      {
+        "dateTime": "2020-05-29T08:20:00.000Z",
+        "messageType": "IE007",
+        "message": "<CC007A><SynIdeMES1>UNOC</SynIdeMES1><SynVerNumMES2>3</SynVerNumMES2><MesSenMES3>LOCAL-A2100005</MesSenMES3><MesRecMES6>NCTS</MesRecMES6><DatOfPreMES9>20200529</DatOfPreMES9><TimOfPreMES10>0820</TimOfPreMES10><IntConRefMES11>AF202005291</IntConRefMES11><AppRefMES14>NCTS</AppRefMES14><TesIndMES18>0</TesIndMES18><MesIdeMES19>1</MesIdeMES19><MesTypMES20>GB007A</MesTypMES20><HEAHEA><DocNumHEA5>19IT02110010007827</DocNumHEA5><CusSubPlaHEA66>test</CusSubPlaHEA66><ArrNotPlaHEA60>NE12 7AE</ArrNotPlaHEA60><ArrNotPlaHEA60LNG>EN</ArrNotPlaHEA60LNG><ArrAgrLocCodHEA62>GB000244</ArrAgrLocCodHEA62><ArrAgrLocOfGooHEA63>BOSTON</ArrAgrLocOfGooHEA63><ArrAgrLocOfGooHEA63LNG>EN</ArrAgrLocOfGooHEA63LNG><SimProFlaHEA132>0</SimProFlaHEA132><ArrNotDatHEA141>20200529</ArrNotDatHEA141></HEAHEA><TRADESTRD><NamTRD7>test</NamTRD7><StrAndNumTRD22>55</StrAndNumTRD22><PosCodTRD23>NE12 7AE</PosCodTRD23><CitTRD24>Newcastle</CitTRD24><CouTRD25>GB</CouTRD25><NADLNGRD>EN</NADLNGRD><TINTRD59>GB000060</TINTRD59></TRADESTRD><CUSOFFPREOFFRES><RefNumRES1>GB000244</RefNumRES1></CUSOFFPREOFFRES></CC007A>",
+        "status": "SubmissionSucceeded",
+        "messageCorrelationId": 1
+      }
+    ]
+  }, {
+    "departureId": 26,
+    "eoriNumber": "GB12345",
+    "referenceNumber": "LRN123456",
+    "status": "DepartureDeclarationReceived",
+    "created": "2020-09-09T09:35:16.392",
+    "updated": "2020-09-14T11:35:16.392",
+    "nextMessageCorrelationId": 2,
+    "messages": [
+      {
+        "dateTime": "2020-05-29T08:20:00.000Z",
+        "messageType": "IE007",
+        "message": "<CC007A><SynIdeMES1>UNOC</SynIdeMES1><SynVerNumMES2>3</SynVerNumMES2><MesSenMES3>LOCAL-A2100005</MesSenMES3><MesRecMES6>NCTS</MesRecMES6><DatOfPreMES9>20200529</DatOfPreMES9><TimOfPreMES10>0820</TimOfPreMES10><IntConRefMES11>AF202005291</IntConRefMES11><AppRefMES14>NCTS</AppRefMES14><TesIndMES18>0</TesIndMES18><MesIdeMES19>1</MesIdeMES19><MesTypMES20>GB007A</MesTypMES20><HEAHEA><DocNumHEA5>19IT02110010007827</DocNumHEA5><CusSubPlaHEA66>test</CusSubPlaHEA66><ArrNotPlaHEA60>NE12 7AE</ArrNotPlaHEA60><ArrNotPlaHEA60LNG>EN</ArrNotPlaHEA60LNG><ArrAgrLocCodHEA62>GB000244</ArrAgrLocCodHEA62><ArrAgrLocOfGooHEA63>BOSTON</ArrAgrLocOfGooHEA63><ArrAgrLocOfGooHEA63LNG>EN</ArrAgrLocOfGooHEA63LNG><SimProFlaHEA132>0</SimProFlaHEA132><ArrNotDatHEA141>20200529</ArrNotDatHEA141></HEAHEA><TRADESTRD><NamTRD7>test</NamTRD7><StrAndNumTRD22>55</StrAndNumTRD22><PosCodTRD23>NE12 7AE</PosCodTRD23><CitTRD24>Newcastle</CitTRD24><CouTRD25>GB</CouTRD25><NADLNGRD>EN</NADLNGRD><TINTRD59>GB000060</TINTRD59></TRADESTRD><CUSOFFPREOFFRES><RefNumRES1>GB000244</RefNumRES1></CUSOFFPREOFFRES></CC007A>",
+        "status": "SubmissionSucceeded",
+        "messageCorrelationId": 1
+      }
+    ]
+  }, {
+    "departureId": 27,
+    "eoriNumber": "GB12345",
+    "referenceNumber": "LRN123456",
+    "status": "QuaranteeValidationFail",
+    "created": "2020-09-09T09:35:16.392",
+    "updated": "2020-09-14T11:35:16.392",
+    "nextMessageCorrelationId": 2,
+    "messages": [
+      {
+        "dateTime": "2020-05-29T08:20:00.000Z",
+        "messageType": "IE007",
+        "message": "<CC007A><SynIdeMES1>UNOC</SynIdeMES1><SynVerNumMES2>3</SynVerNumMES2><MesSenMES3>LOCAL-A2100005</MesSenMES3><MesRecMES6>NCTS</MesRecMES6><DatOfPreMES9>20200529</DatOfPreMES9><TimOfPreMES10>0820</TimOfPreMES10><IntConRefMES11>AF202005291</IntConRefMES11><AppRefMES14>NCTS</AppRefMES14><TesIndMES18>0</TesIndMES18><MesIdeMES19>1</MesIdeMES19><MesTypMES20>GB007A</MesTypMES20><HEAHEA><DocNumHEA5>19IT02110010007827</DocNumHEA5><CusSubPlaHEA66>test</CusSubPlaHEA66><ArrNotPlaHEA60>NE12 7AE</ArrNotPlaHEA60><ArrNotPlaHEA60LNG>EN</ArrNotPlaHEA60LNG><ArrAgrLocCodHEA62>GB000244</ArrAgrLocCodHEA62><ArrAgrLocOfGooHEA63>BOSTON</ArrAgrLocOfGooHEA63><ArrAgrLocOfGooHEA63LNG>EN</ArrAgrLocOfGooHEA63LNG><SimProFlaHEA132>0</SimProFlaHEA132><ArrNotDatHEA141>20200529</ArrNotDatHEA141></HEAHEA><TRADESTRD><NamTRD7>test</NamTRD7><StrAndNumTRD22>55</StrAndNumTRD22><PosCodTRD23>NE12 7AE</PosCodTRD23><CitTRD24>Newcastle</CitTRD24><CouTRD25>GB</CouTRD25><NADLNGRD>EN</NADLNGRD><TINTRD59>GB000060</TINTRD59></TRADESTRD><CUSOFFPREOFFRES><RefNumRES1>GB000244</RefNumRES1></CUSOFFPREOFFRES></CC007A>",
+        "status": "SubmissionSucceeded",
+        "messageCorrelationId": 1
+      }
+    ]
+  }, {
+    "departureId": 28,
+    "eoriNumber": "GB12345",
+    "referenceNumber": "LRN123456",
+    "status": "TransitDeclarationSent",
+    "created": "2020-09-09T09:35:16.392",
+    "updated": "2020-09-14T11:35:16.392",
+    "nextMessageCorrelationId": 2,
+    "messages": [
+      {
+        "dateTime": "2020-05-29T08:20:00.000Z",
+        "messageType": "IE007",
+        "message": "<CC007A><SynIdeMES1>UNOC</SynIdeMES1><SynVerNumMES2>3</SynVerNumMES2><MesSenMES3>LOCAL-A2100005</MesSenMES3><MesRecMES6>NCTS</MesRecMES6><DatOfPreMES9>20200529</DatOfPreMES9><TimOfPreMES10>0820</TimOfPreMES10><IntConRefMES11>AF202005291</IntConRefMES11><AppRefMES14>NCTS</AppRefMES14><TesIndMES18>0</TesIndMES18><MesIdeMES19>1</MesIdeMES19><MesTypMES20>GB007A</MesTypMES20><HEAHEA><DocNumHEA5>19IT02110010007827</DocNumHEA5><CusSubPlaHEA66>test</CusSubPlaHEA66><ArrNotPlaHEA60>NE12 7AE</ArrNotPlaHEA60><ArrNotPlaHEA60LNG>EN</ArrNotPlaHEA60LNG><ArrAgrLocCodHEA62>GB000244</ArrAgrLocCodHEA62><ArrAgrLocOfGooHEA63>BOSTON</ArrAgrLocOfGooHEA63><ArrAgrLocOfGooHEA63LNG>EN</ArrAgrLocOfGooHEA63LNG><SimProFlaHEA132>0</SimProFlaHEA132><ArrNotDatHEA141>20200529</ArrNotDatHEA141></HEAHEA><TRADESTRD><NamTRD7>test</NamTRD7><StrAndNumTRD22>55</StrAndNumTRD22><PosCodTRD23>NE12 7AE</PosCodTRD23><CitTRD24>Newcastle</CitTRD24><CouTRD25>GB</CouTRD25><NADLNGRD>EN</NADLNGRD><TINTRD59>GB000060</TINTRD59></TRADESTRD><CUSOFFPREOFFRES><RefNumRES1>GB000244</RefNumRES1></CUSOFFPREOFFRES></CC007A>",
+        "status": "SubmissionSucceeded",
+        "messageCorrelationId": 1
+      }
+    ]
+  }]
+}
