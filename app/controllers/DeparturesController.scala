@@ -33,9 +33,9 @@ class DeparturesController @Inject()(appConfig: AppConfig, cc: ControllerCompone
         if (value == s"Bearer ${appConfig.eisBearerToken}")
           Accepted
         else
-          InternalServerError
+          Unauthorized
       case None =>
-        InternalServerError
+        Unauthorized
     }
   }
 }
