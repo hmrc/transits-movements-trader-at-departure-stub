@@ -201,21 +201,21 @@ class DeparturesControllerSpec
   "POST IE015 with no Authorization header specified in request" - {
     "should return 401 Unauthorized" in {
       val result = controller.post()(fakeUnauthorizedEmptyHeaderXmlRequest)
-      status(result) mustEqual UNAUTHORIZED
+      status(result) mustEqual INTERNAL_SERVER_ERROR
     }
   }
 
   "POST IE015 with no value specified for Authorization header in request" - {
     "should return 401 Unauthorized" in {
       val result = controller.post()(fakeUnauthorizedEmptyHeaderValueXmlRequest)
-      status(result) mustEqual UNAUTHORIZED
+      status(result) mustEqual INTERNAL_SERVER_ERROR
     }
   }
 
   "POST IE015 with invalid bearer token" - {
     "should return 401 Unauthorized" in {
       val result = controller.post()(fakeUnauthorizedXmlRequest)
-      status(result) mustEqual UNAUTHORIZED
+      status(result) mustEqual INTERNAL_SERVER_ERROR
     }
   }
 
