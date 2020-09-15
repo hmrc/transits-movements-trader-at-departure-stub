@@ -17,17 +17,27 @@
 package controllers
 
 import com.google.inject.Inject
+import config.AppConfig
+import play.api.http.HeaderNames
 import play.api.mvc.Action
 import play.api.mvc.AnyContent
 import play.api.mvc.ControllerComponents
 import uk.gov.hmrc.play.bootstrap.controller.BackendController
 import utils.JsonUtils
 
-class DeparturesController @Inject()(cc: ControllerComponents, jsonUtils: JsonUtils)
+class DeparturesController @Inject()(appConfig: AppConfig, cc: ControllerComponents, jsonUtils: JsonUtils)
     extends BackendController(cc) {
 
   def post: Action[AnyContent] = Action { implicit request =>
-    Accepted
+    request.headers.get(HeaderNames.AUTHORIZATION) match {
+      case Some(value) =>
+        if (value == s"Bearer ${appConfig.eisBearerToken}")
+          Accepted
+        else
+          Unauthorized
+      case None =>
+        Unauthorized
+    }
   }
 
   def getDepartures: Action[AnyContent] = Action {

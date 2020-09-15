@@ -88,7 +88,7 @@
     "departureId": 27,
     "eoriNumber": "GB12345",
     "referenceNumber": "LRN123456",
-    "status": "QuaranteeValidationFail",
+    "status": "GuaranteeValidationFail",
     "created": "2020-09-09T09:35:16.392",
     "updated": "2020-09-14T11:35:16.392",
     "nextMessageCorrelationId": 2,
