@@ -40,7 +40,7 @@ class DeparturesController @Inject()(appConfig: AppConfig, cc: ControllerCompone
     }
   }
 
-  def getDepartures: Action[AnyContent] = Action {
+  def get: Action[AnyContent] = Action {
     implicit request =>
       val json = jsonUtils.readJsonFromFile("conf/resources/departure-response.json")
 
