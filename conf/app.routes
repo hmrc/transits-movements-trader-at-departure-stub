@@ -1,4 +1,4 @@
 # microservice specific routes
 
 POST                    /movements/departures                     controllers.DeparturesController.post
-GET                     /movements/departures                     controllers.DeparturesController.getDepartures
+GET                     /movements/departures                     controllers.DeparturesController.get
