@@ -23,8 +23,9 @@ import play.api.mvc.Action
 import play.api.mvc.AnyContent
 import play.api.mvc.ControllerComponents
 import uk.gov.hmrc.play.bootstrap.controller.BackendController
+import utils.JsonUtils
 
-class DeparturesController @Inject()(appConfig: AppConfig, cc: ControllerComponents)
+class DeparturesController @Inject()(appConfig: AppConfig, cc: ControllerComponents, jsonUtils: JsonUtils)
     extends BackendController(cc) {
 
   def post: Action[AnyContent] = Action { implicit request =>
@@ -37,5 +38,12 @@ class DeparturesController @Inject()(appConfig: AppConfig, cc: ControllerCompone
       case None =>
         Unauthorized
     }
+  }
+
+  def get: Action[AnyContent] = Action {
+    implicit request =>
+      val json = jsonUtils.readJsonFromFile("conf/resources/departure-response.json")
+
+      Ok(json).as("application/json")
   }
 }

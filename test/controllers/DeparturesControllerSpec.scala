@@ -28,6 +28,7 @@ import play.api.{Configuration, Environment, Mode}
 import play.api.test.{FakeHeaders, FakeRequest, Helpers}
 import play.api.test.Helpers._
 import uk.gov.hmrc.play.bootstrap.config.{RunMode, ServicesConfig}
+import utils.JsonUtils
 
 class DeparturesControllerSpec
     extends AnyFreeSpec
@@ -44,8 +45,9 @@ class DeparturesControllerSpec
 
   private val serviceConfig = new ServicesConfig(configuration, new RunMode(configuration, Mode.Dev))
   private val appConfig     = new AppConfig(configuration, serviceConfig)
+  private val jsonUtils     = new JsonUtils(env)
 
-  private val controller = new DeparturesController(appConfig, Helpers.stubControllerComponents())
+  private val controller = new DeparturesController(appConfig, Helpers.stubControllerComponents(), jsonUtils)
 
   val CC015B = <CC015B>
     <SynIdeMES1>UNOC</SynIdeMES1>
