@@ -18,26 +18,37 @@ package controllers
 
 import com.google.inject.Inject
 import config.AppConfig
+import play.api.Logger
 import play.api.http.HeaderNames
-import play.api.mvc.Action
-import play.api.mvc.AnyContent
-import play.api.mvc.ControllerComponents
+import play.api.mvc.{Action, AnyContent, ControllerComponents, Request}
+import services.HeaderValidatorService
 import uk.gov.hmrc.play.bootstrap.controller.BackendController
 import utils.JsonUtils
 
-class DeparturesController @Inject()(appConfig: AppConfig, cc: ControllerComponents, jsonUtils: JsonUtils)
+import scala.concurrent.Future
+import scala.xml.NodeSeq
+
+class DeparturesController @Inject()(appConfig: AppConfig, cc: ControllerComponents, headerValidatorService: HeaderValidatorService, jsonUtils: JsonUtils)
     extends BackendController(cc) {
 
-  def post: Action[AnyContent] = Action { implicit request =>
-    request.headers.get(HeaderNames.AUTHORIZATION) match {
-      case Some(value) =>
-        if (value == s"Bearer ${appConfig.eisBearerToken}")
-          Accepted
-        else
-          Unauthorized
-      case None =>
-        Unauthorized
-    }
+  def post: Action[NodeSeq] = Action.async(parse.xml) {
+    implicit request: Request[NodeSeq] =>
+      request.headers.get(HeaderNames.AUTHORIZATION) match {
+        case Some(value) =>
+          if (value == s"Bearer ${appConfig.eisBearerToken}") {
+            if (headerValidatorService.validate(request.headers)) {
+              Logger.warn(s"validated XML ${request.body.toString()}")
+              Future.successful(Accepted)
+            } else {
+              Logger.warn("FAILED VALIDATING headers")
+              Future.successful(BadRequest)
+            }
+          } else {
+            Future.successful(Unauthorized)
+          }
+        case None =>
+          Future.successful(Unauthorized)
+      }
   }
 
   def get: Action[AnyContent] = Action {
