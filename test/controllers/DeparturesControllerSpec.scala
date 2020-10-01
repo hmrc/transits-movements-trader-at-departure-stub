@@ -27,6 +27,7 @@ import play.api.http.{HeaderNames, MimeTypes}
 import play.api.{Configuration, Environment, Mode}
 import play.api.test.{FakeHeaders, FakeRequest, Helpers}
 import play.api.test.Helpers._
+import services.{HeaderValidatorService, HeaderValidatorServiceImpl}
 import uk.gov.hmrc.play.bootstrap.config.{RunMode, ServicesConfig}
 import utils.JsonUtils
 
@@ -46,8 +47,9 @@ class DeparturesControllerSpec
   private val serviceConfig = new ServicesConfig(configuration, new RunMode(configuration, Mode.Dev))
   private val appConfig     = new AppConfig(configuration, serviceConfig)
   private val jsonUtils     = new JsonUtils(env)
+  private val headerValidator = new HeaderValidatorServiceImpl()
 
-  private val controller = new DeparturesController(appConfig, Helpers.stubControllerComponents(), jsonUtils)
+  private val controller = new DeparturesController(appConfig, Helpers.stubControllerComponents(), headerValidator, jsonUtils)
 
   val CC015B = <CC015B>
     <SynIdeMES1>UNOC</SynIdeMES1>
@@ -169,34 +171,65 @@ class DeparturesControllerSpec
     </GOOITEGDS>
   </CC015B>
 
+  val validHeaders: Seq[(String, String)] = Seq(
+    "X-Forwarded-Host" -> "mdtp",
+    "X-Correlation-ID" -> "137302f5-71ae-40a4-bd92-cac2ae7sde2f",
+    "Date" -> "Tue, 29 Sep 2020 11:46:50 +0100",
+    "Content-Type" -> "application/xml",
+    "Accept" -> "application/xml",
+    "X-Message-Type" -> "IE015",
+    "X-Message-Sender" -> "MDTP-000000000000000000000000011-01"
+  )
+
+  val invalidHeaders: Seq[(String, String)] = Seq(
+    "X-Forwarded-Host" -> "mdtp",
+    "X-Correlation-ID" -> "137302f5-71ae-40a4-bd92-cac2ae7sde2f",
+    "Date" -> "Tue, 29 Sep 2020 11:46:50 +0100",
+    "Content-Type" -> "application/xml",
+    "Accept" -> "application/xml"
+  )
+
   private val fakeValidXmlRequest = FakeRequest(
     method = "POST",
     uri = routes.DeparturesController.post().url,
-    headers = FakeHeaders(Seq(HeaderNames.CONTENT_TYPE -> MimeTypes.XML, HeaderNames.AUTHORIZATION -> s"Bearer ${appConfig.eisBearerToken}")),
+    headers = FakeHeaders(validHeaders ++ Seq(HeaderNames.AUTHORIZATION -> s"Bearer ${appConfig.eisBearerToken}")),
+    body = CC015B)
+
+  private val fakeInvalidXmlRequest = FakeRequest(
+    method = "POST",
+    uri = routes.DeparturesController.post().url,
+    headers = FakeHeaders(invalidHeaders ++ Seq(HeaderNames.AUTHORIZATION -> s"Bearer ${appConfig.eisBearerToken}")),
     body = CC015B)
 
   private val fakeUnauthorizedEmptyHeaderXmlRequest = FakeRequest(
     method = "POST",
     uri = routes.DeparturesController.post().url,
-    headers = FakeHeaders(Seq(HeaderNames.CONTENT_TYPE -> MimeTypes.XML)),
+    headers = FakeHeaders(validHeaders),
     body = CC015B)
 
   private val fakeUnauthorizedEmptyHeaderValueXmlRequest = FakeRequest(
     method = "POST",
     uri = routes.DeparturesController.post().url,
-    headers = FakeHeaders(Seq(HeaderNames.CONTENT_TYPE -> MimeTypes.XML, HeaderNames.AUTHORIZATION -> s"")),
+    headers = FakeHeaders(validHeaders ++ Seq(HeaderNames.AUTHORIZATION -> s"")),
     body = CC015B)
 
   private val fakeUnauthorizedXmlRequest = FakeRequest(
     method = "POST",
     uri = routes.DeparturesController.post().url,
-    headers = FakeHeaders(Seq(HeaderNames.CONTENT_TYPE -> MimeTypes.XML, HeaderNames.AUTHORIZATION -> s"Bearer 123")),
+    headers = FakeHeaders(validHeaders ++ Seq(HeaderNames.AUTHORIZATION -> s"Bearer 123")),
     body = CC015B)
 
-  "POST IE015 with valid bearer token" - {
+  "POST IE015 with valid headers and valid bearer token" - {
     "should return 202 Accepted" in {
       val result = controller.post()(fakeValidXmlRequest)
       status(result) mustEqual ACCEPTED
+    }
+  }
+
+  "POST IE015 with invalid headers and valid bearer token" - {
+    "should return 202 Accepted" in {
+      val result = controller.post()(fakeInvalidXmlRequest)
+      status(result) mustEqual BAD_REQUEST
     }
   }
 
