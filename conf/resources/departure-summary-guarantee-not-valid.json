@@ -1,0 +1,8 @@
+{
+  "departureId": 1,
+  "messages":
+    {
+      "IE015": "/transits-movements-trader-at-departure-stub/movements/departures/1/messages/1",
+      "IE055": "/transits-movements-trader-at-departure-stub/movements/departures/1/messages/2"
+    }
+}
