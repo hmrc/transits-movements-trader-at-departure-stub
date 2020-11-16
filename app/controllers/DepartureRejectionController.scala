@@ -23,7 +23,7 @@ import utils.JsonUtils
 
 class DepartureRejectionController @Inject()(cc: ControllerComponents, jsonUtils: JsonUtils) extends BackendController(cc) {
 
-  private val GuaranteeNotValidDepartureId: Int                 = 1
+  private val GuaranteeNotValidDepartureId: Int                 = 27
   private val GuaranteeNotValidMessageId: Int                 = 2
 
   def getSummary(departureId: Int): Action[AnyContent] = Action {

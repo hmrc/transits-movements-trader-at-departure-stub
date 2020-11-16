@@ -25,7 +25,7 @@ import play.api.test.Helpers._
 
 class DepartureRejectionControllerSpec extends AnyFreeSpec with Matchers with GuiceOneAppPerSuite with OptionValues {
 
-  private val departureId = 1
+  private val departureId = 27
   private val invalidDepartureId = 11111
   private val guaranteeInValidMessageId = 2
 
