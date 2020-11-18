@@ -26,7 +26,7 @@ class DepartureRejectionController @Inject()(cc: ControllerComponents, jsonUtils
   private val GuaranteeNotValidDepartureId: Int = 27
   private val GuaranteeNotValidMessageId: Int = 2
   private val DeclarationRejectionDepartureId: Int = 33
-  private val DeclarationRejectionMessageId: Int = 3
+  private val DeclarationRejectionMessageId: Int = 2
 
   def getSummary(departureId: Int): Action[AnyContent] = Action {
     implicit request =>

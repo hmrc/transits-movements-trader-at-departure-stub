@@ -28,7 +28,7 @@ class DepartureRejectionControllerSpec extends AnyFreeSpec with Matchers with Gu
   private val departureId = 27
   private val guaranteeInValidMessageId = 2
   private val declarationRejectId = 33
-  private val declarationRejectMessageId = 3
+  private val declarationRejectMessageId = 2
   private val invalidDepartureId = 11111
 
   "DepartureRejectionControllerSpec" - {
