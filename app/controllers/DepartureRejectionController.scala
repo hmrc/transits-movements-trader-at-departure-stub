@@ -23,14 +23,19 @@ import utils.JsonUtils
 
 class DepartureRejectionController @Inject()(cc: ControllerComponents, jsonUtils: JsonUtils) extends BackendController(cc) {
 
-  private val GuaranteeNotValidDepartureId: Int                 = 27
-  private val GuaranteeNotValidMessageId: Int                 = 2
+  private val GuaranteeNotValidDepartureId: Int = 27
+  private val GuaranteeNotValidMessageId: Int = 2
+  private val DeclarationRejectionDepartureId: Int = 33
+  private val DeclarationRejectionMessageId: Int = 3
 
   def getSummary(departureId: Int): Action[AnyContent] = Action {
     implicit request =>
       departureId match {
-        case GuaranteeNotValidDepartureId                       =>
+        case GuaranteeNotValidDepartureId =>
           val json = jsonUtils.readJsonFromFile("conf/resources/departure-summary-guarantee-not-valid.json")
+          Ok(json).as("application/json")
+        case DeclarationRejectionDepartureId =>
+          val json = jsonUtils.readJsonFromFile("conf/resources/departure-summary-declaration-rejection.json")
           Ok(json).as("application/json")
         case _ => BadRequest
       }
@@ -38,10 +43,12 @@ class DepartureRejectionController @Inject()(cc: ControllerComponents, jsonUtils
 
   def getMessage(arrivalId: Int, messageId: Int): Action[AnyContent] = Action {
     implicit request =>
-     (arrivalId, messageId) match {
+      (arrivalId, messageId) match {
         case (GuaranteeNotValidDepartureId, GuaranteeNotValidMessageId) => Ok(jsonUtils.readJsonFromFile("conf/resources/guarantee-not-valid-rejection.json")).as("application/json")
+        case (DeclarationRejectionDepartureId, DeclarationRejectionMessageId) => Ok(jsonUtils.readJsonFromFile("conf/resources/declaration-rejection.json")).as("application/json")
         case _ => BadRequest
       }
   }
+
 
 }
