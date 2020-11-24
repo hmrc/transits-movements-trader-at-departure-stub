@@ -51,7 +51,7 @@
       }
     ]
   }, {
-    "departureId": 25,
+    "departureId": 33,
     "eoriNumber": "GB12345",
     "referenceNumber": "LRN123459",
     "status": "TransitDeclarationRejected",
