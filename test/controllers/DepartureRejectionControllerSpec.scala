@@ -29,6 +29,10 @@ class DepartureRejectionControllerSpec extends AnyFreeSpec with Matchers with Gu
   private val guaranteeInValidMessageId = 2
   private val declarationRejectId = 33
   private val declarationRejectMessageId = 2
+  private val cancellationDecisionUpdateId: Int = 39
+  private val cancellationDecisionUpdateMessageId: Int = 2
+  private val declarationCancellationId: Int = 45
+  private val declarationCancellationMessageId: Int = 2
   private val invalidDepartureId = 11111
 
   "DepartureRejectionControllerSpec" - {
@@ -47,6 +51,24 @@ class DepartureRejectionControllerSpec extends AnyFreeSpec with Matchers with Gu
       "must return departure declaration rejection summary" in {
 
         val request = FakeRequest(GET, routes.DepartureRejectionController.getSummary(declarationRejectId).url)
+        val result = route(app, request).value
+
+        status(result) mustEqual OK
+        contentType(result).get mustEqual "application/json"
+      }
+
+      "must return cancellation decision update summary" in {
+
+        val request = FakeRequest(GET, routes.DepartureRejectionController.getSummary(cancellationDecisionUpdateId).url)
+        val result = route(app, request).value
+
+        status(result) mustEqual OK
+        contentType(result).get mustEqual "application/json"
+      }
+
+      "must return declaration cancellation summary" in {
+
+        val request = FakeRequest(GET, routes.DepartureRejectionController.getSummary(declarationCancellationId).url)
         val result = route(app, request).value
 
         status(result) mustEqual OK
@@ -77,6 +99,24 @@ class DepartureRejectionControllerSpec extends AnyFreeSpec with Matchers with Gu
       "must return departure rejection message" in {
 
         val request = FakeRequest(GET, routes.DepartureRejectionController.getMessage(declarationRejectId, declarationRejectMessageId).url)
+        val result = route(app, request).value
+
+        status(result) mustEqual OK
+        contentType(result).get mustEqual "application/json"
+      }
+
+      "must return cancellation decision update message" in {
+
+        val request = FakeRequest(GET, routes.DepartureRejectionController.getMessage(cancellationDecisionUpdateId, cancellationDecisionUpdateMessageId).url)
+        val result = route(app, request).value
+
+        status(result) mustEqual OK
+        contentType(result).get mustEqual "application/json"
+      }
+
+      "must return declaration cancellation message" in {
+
+        val request = FakeRequest(GET, routes.DepartureRejectionController.getMessage(declarationCancellationId, declarationCancellationMessageId).url)
         val result = route(app, request).value
 
         status(result) mustEqual OK

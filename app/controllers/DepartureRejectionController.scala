@@ -27,6 +27,10 @@ class DepartureRejectionController @Inject()(cc: ControllerComponents, jsonUtils
   private val GuaranteeNotValidMessageId: Int = 2
   private val DeclarationRejectionDepartureId: Int = 33
   private val DeclarationRejectionMessageId: Int = 2
+  private val CancellationDecisionUpdateId: Int = 39
+  private val CancellationDecisionUpdateMessageId: Int = 2
+  private val DeclarationCancellationId: Int = 45
+  private val DeclarationCancellationMessageId: Int = 2
 
   def getSummary(departureId: Int): Action[AnyContent] = Action {
     implicit request =>
@@ -37,6 +41,12 @@ class DepartureRejectionController @Inject()(cc: ControllerComponents, jsonUtils
         case DeclarationRejectionDepartureId =>
           val json = jsonUtils.readJsonFromFile("conf/resources/departure-summary-declaration-rejection.json")
           Ok(json).as("application/json")
+        case CancellationDecisionUpdateId =>
+          val json = jsonUtils.readJsonFromFile("conf/resources/departure-summary-cancellation-decision-update.json")
+          Ok(json).as("application/json")
+        case DeclarationCancellationId =>
+          val json = jsonUtils.readJsonFromFile("conf/resources/departure-summary-user-submits-declaration-cancellation.json")
+          Ok(json).as("application/json")
         case _ => BadRequest
       }
   }
@@ -46,6 +56,8 @@ class DepartureRejectionController @Inject()(cc: ControllerComponents, jsonUtils
       (arrivalId, messageId) match {
         case (GuaranteeNotValidDepartureId, GuaranteeNotValidMessageId) => Ok(jsonUtils.readJsonFromFile("conf/resources/guarantee-not-valid-rejection.json")).as("application/json")
         case (DeclarationRejectionDepartureId, DeclarationRejectionMessageId) => Ok(jsonUtils.readJsonFromFile("conf/resources/declaration-rejection.json")).as("application/json")
+        case (CancellationDecisionUpdateId, CancellationDecisionUpdateMessageId) => Ok(jsonUtils.readJsonFromFile("conf/resources/cancellation-decision-message-status-update.json")).as("application/json")
+        case (DeclarationCancellationId, DeclarationCancellationMessageId) => Ok(jsonUtils.readJsonFromFile("conf/resources/user-submits-declaration-cancellation.json")).as("application/json")
         case _ => BadRequest
       }
   }
