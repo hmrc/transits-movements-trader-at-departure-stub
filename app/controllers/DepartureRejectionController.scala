@@ -42,10 +42,10 @@ class DepartureRejectionController @Inject()(cc: ControllerComponents, jsonUtils
           val json = jsonUtils.readJsonFromFile("conf/resources/departure-summary-declaration-rejection.json")
           Ok(json).as("application/json")
         case CancellationDecisionUpdateId =>
-          val json = jsonUtils.readJsonFromFile("conf/resources/cancellation-decision-message-status-update.json")
+          val json = jsonUtils.readJsonFromFile("conf/resources/departure-summary-cancellation-decision-update.json")
           Ok(json).as("application/json")
         case DeclarationCancellationId =>
-          val json = jsonUtils.readJsonFromFile("conf/resources/user-submits-declaration-cancellation.json")
+          val json = jsonUtils.readJsonFromFile("conf/resources/departure-summary-user-submits-declaration-cancellation.json")
           Ok(json).as("application/json")
         case _ => BadRequest
       }
