@@ -26,7 +26,7 @@ class HeaderValidatorServiceImpl extends HeaderValidatorService {
 
   def validate(headers: Headers): Boolean = {
 
-    val xForwardedHost = headers.get("X-Forwarded-Host").isDefined
+    val customProcessHost = headers.get("CustomProcessHost").isDefined
 
     val xCorrelationId = headers.get("X-Correlation-ID").isDefined
 
@@ -40,7 +40,7 @@ class HeaderValidatorServiceImpl extends HeaderValidatorService {
 
     val messageSender = headers.get("X-Message-Sender").isDefined
 
-    xForwardedHost && xCorrelationId && date && contentType && accept && messageType && messageSender
+    customProcessHost && xCorrelationId && date && contentType && accept && messageType && messageSender
   }
 
 }

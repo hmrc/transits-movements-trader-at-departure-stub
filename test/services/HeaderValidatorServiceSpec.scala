@@ -29,7 +29,7 @@ class HeaderValidatorServiceSpec extends AnyFreeSpec with Matchers {
     "validate should return true if valid headers are specified" in {
 
       val validHeaders: Seq[(String, String)] = Seq(
-        "X-Forwarded-Host" -> "mdtp",
+        "CustomProcessHost" -> "Digital",
         "X-Correlation-ID" -> "137302f5-71ae-40a4-bd92-cac2ae7sde2f",
         "Date" -> "Tue, 29 Sep 2020 11:46:50 +0100",
         "Content-Type" -> "application/xml",
@@ -46,7 +46,7 @@ class HeaderValidatorServiceSpec extends AnyFreeSpec with Matchers {
     "validate should return false if invalid headers are specified" in {
 
       val invalidHeaders: Seq[(String, String)] = Seq(
-        "X-Forwarded-Host" -> "mdtp",
+        "CustomProcessHost" -> "Digital",
         "X-Correlation-ID" -> "137302f5-71ae-40a4-bd92-cac2ae7sde2f",
         "Date" -> "Tue, 29 Sep 2020 11:46:50 +0100",
         "Content-Type" -> "application/xml",

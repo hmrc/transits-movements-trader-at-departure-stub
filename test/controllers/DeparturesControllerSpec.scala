@@ -172,7 +172,7 @@ class DeparturesControllerSpec
   </CC015B>
 
   val validHeaders: Seq[(String, String)] = Seq(
-    "X-Forwarded-Host" -> "mdtp",
+    "CustomProcessHost" -> "Digital",
     "X-Correlation-ID" -> "137302f5-71ae-40a4-bd92-cac2ae7sde2f",
     "Date" -> "Tue, 29 Sep 2020 11:46:50 +0100",
     "Content-Type" -> "application/xml",
@@ -182,7 +182,7 @@ class DeparturesControllerSpec
   )
 
   val invalidHeaders: Seq[(String, String)] = Seq(
-    "X-Forwarded-Host" -> "mdtp",
+    "CustomProcessHost" -> "Digital",
     "X-Correlation-ID" -> "137302f5-71ae-40a4-bd92-cac2ae7sde2f",
     "Date" -> "Tue, 29 Sep 2020 11:46:50 +0100",
     "Content-Type" -> "application/xml",
