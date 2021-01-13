@@ -31,11 +31,33 @@ import scala.xml.NodeSeq
 class DeparturesController @Inject()(appConfig: AppConfig, cc: ControllerComponents, headerValidatorService: HeaderValidatorService, jsonUtils: JsonUtils)
     extends BackendController(cc) {
 
-  def post: Action[NodeSeq] = Action.async(parse.xml) {
+  def gbpost: Action[NodeSeq] = Action.async(parse.xml) {
     implicit request: Request[NodeSeq] =>
+      Logger.info("gb endpoint called")
       request.headers.get(HeaderNames.AUTHORIZATION) match {
         case Some(value) =>
-          if (value == s"Bearer ${appConfig.eisBearerToken}") {
+          if (value == s"Bearer ${appConfig.eisgbBearerToken}") {
+            if (headerValidatorService.validate(request.headers)) {
+              Logger.warn(s"validated XML ${request.body.toString()}")
+              Future.successful(Accepted)
+            } else {
+              Logger.warn("FAILED VALIDATING headers")
+              Future.successful(BadRequest)
+            }
+          } else {
+            Future.successful(Unauthorized)
+          }
+        case None =>
+          Future.successful(Unauthorized)
+      }
+  }
+
+  def nipost: Action[NodeSeq] = Action.async(parse.xml) {
+    implicit request: Request[NodeSeq] =>
+      Logger.info("ni endpoint called")
+      request.headers.get(HeaderNames.AUTHORIZATION) match {
+        case Some(value) =>
+          if (value == s"Bearer ${appConfig.eisgbBearerToken}") {
             if (headerValidatorService.validate(request.headers)) {
               Logger.warn(s"validated XML ${request.body.toString()}")
               Future.successful(Accepted)
