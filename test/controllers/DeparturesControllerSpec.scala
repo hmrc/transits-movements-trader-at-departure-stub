@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 HM Revenue & Customs
+ * Copyright 2021 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -189,69 +189,109 @@ class DeparturesControllerSpec
     "Accept" -> "application/xml"
   )
 
-  private val fakeValidXmlRequest = FakeRequest(
+  private def fakeValidXmlRequest(bearerToken: String) = FakeRequest(
     method = "POST",
-    uri = routes.DeparturesController.post().url,
-    headers = FakeHeaders(validHeaders ++ Seq(HeaderNames.AUTHORIZATION -> s"Bearer ${appConfig.eisBearerToken}")),
+    uri = routes.DeparturesController.gbpost().url,
+    headers = FakeHeaders(validHeaders ++ Seq(HeaderNames.AUTHORIZATION -> s"Bearer $bearerToken")),
     body = CC015B)
 
-  private val fakeInvalidXmlRequest = FakeRequest(
+  private def fakeInvalidXmlRequest(bearerToken: String) = FakeRequest(
     method = "POST",
-    uri = routes.DeparturesController.post().url,
-    headers = FakeHeaders(invalidHeaders ++ Seq(HeaderNames.AUTHORIZATION -> s"Bearer ${appConfig.eisBearerToken}")),
+    uri = routes.DeparturesController.gbpost().url,
+    headers = FakeHeaders(invalidHeaders ++ Seq(HeaderNames.AUTHORIZATION -> s"Bearer $bearerToken")),
     body = CC015B)
 
   private val fakeUnauthorizedEmptyHeaderXmlRequest = FakeRequest(
     method = "POST",
-    uri = routes.DeparturesController.post().url,
+    uri = routes.DeparturesController.gbpost().url,
     headers = FakeHeaders(validHeaders),
     body = CC015B)
 
   private val fakeUnauthorizedEmptyHeaderValueXmlRequest = FakeRequest(
     method = "POST",
-    uri = routes.DeparturesController.post().url,
+    uri = routes.DeparturesController.gbpost().url,
     headers = FakeHeaders(validHeaders ++ Seq(HeaderNames.AUTHORIZATION -> s"")),
     body = CC015B)
 
   private val fakeUnauthorizedXmlRequest = FakeRequest(
     method = "POST",
-    uri = routes.DeparturesController.post().url,
+    uri = routes.DeparturesController.gbpost().url,
     headers = FakeHeaders(validHeaders ++ Seq(HeaderNames.AUTHORIZATION -> s"Bearer 123")),
     body = CC015B)
 
-  "POST IE015 with valid headers and valid bearer token" - {
-    "should return 202 Accepted" in {
-      val result = controller.post()(fakeValidXmlRequest)
-      status(result) mustEqual ACCEPTED
+  "gbpost" - {
+    "POST IE015 with valid headers and valid bearer token" - {
+      "should return 202 Accepted" in {
+        val result = controller.gbpost()(fakeValidXmlRequest(appConfig.eisgbBearerToken))
+        status(result) mustEqual ACCEPTED
+      }
+    }
+
+    "POST IE015 with invalid headers and valid bearer token" - {
+      "should return 202 Accepted" in {
+        val result = controller.gbpost()(fakeInvalidXmlRequest(appConfig.eisgbBearerToken))
+        status(result) mustEqual BAD_REQUEST
+      }
+    }
+
+    "POST IE015 with no Authorization header specified in request" - {
+      "should return 401 Unauthorized" in {
+        val result = controller.gbpost()(fakeUnauthorizedEmptyHeaderXmlRequest)
+        status(result) mustEqual UNAUTHORIZED
+      }
+    }
+
+    "POST IE015 with no value specified for Authorization header in request" - {
+      "should return 401 Unauthorized" in {
+        val result = controller.gbpost()(fakeUnauthorizedEmptyHeaderValueXmlRequest)
+        status(result) mustEqual UNAUTHORIZED
+      }
+    }
+
+    "POST IE015 with invalid bearer token" - {
+      "should return 401 Unauthorized" in {
+        val result = controller.gbpost()(fakeUnauthorizedXmlRequest)
+        status(result) mustEqual UNAUTHORIZED
+      }
     }
   }
 
-  "POST IE015 with invalid headers and valid bearer token" - {
-    "should return 202 Accepted" in {
-      val result = controller.post()(fakeInvalidXmlRequest)
-      status(result) mustEqual BAD_REQUEST
+  "nipost" - {
+    "POST IE015 with valid headers and valid bearer token" - {
+      "should return 202 Accepted" in {
+        val result = controller.nipost()(fakeValidXmlRequest(appConfig.eisniBearerToken))
+        status(result) mustEqual ACCEPTED
+      }
+    }
+
+    "POST IE015 with invalid headers and valid bearer token" - {
+      "should return 202 Accepted" in {
+        val result = controller.nipost()(fakeInvalidXmlRequest(appConfig.eisniBearerToken))
+        status(result) mustEqual BAD_REQUEST
+      }
+    }
+
+    "POST IE015 with no Authorization header specified in request" - {
+      "should return 401 Unauthorized" in {
+        val result = controller.nipost()(fakeUnauthorizedEmptyHeaderXmlRequest)
+        status(result) mustEqual UNAUTHORIZED
+      }
+    }
+
+    "POST IE015 with no value specified for Authorization header in request" - {
+      "should return 401 Unauthorized" in {
+        val result = controller.nipost()(fakeUnauthorizedEmptyHeaderValueXmlRequest)
+        status(result) mustEqual UNAUTHORIZED
+      }
+    }
+
+    "POST IE015 with invalid bearer token" - {
+      "should return 401 Unauthorized" in {
+        val result = controller.nipost()(fakeUnauthorizedXmlRequest)
+        status(result) mustEqual UNAUTHORIZED
+      }
     }
   }
 
-  "POST IE015 with no Authorization header specified in request" - {
-    "should return 401 Unauthorized" in {
-      val result = controller.post()(fakeUnauthorizedEmptyHeaderXmlRequest)
-      status(result) mustEqual UNAUTHORIZED
-    }
-  }
-
-  "POST IE015 with no value specified for Authorization header in request" - {
-    "should return 401 Unauthorized" in {
-      val result = controller.post()(fakeUnauthorizedEmptyHeaderValueXmlRequest)
-      status(result) mustEqual UNAUTHORIZED
-    }
-  }
-
-  "POST IE015 with invalid bearer token" - {
-    "should return 401 Unauthorized" in {
-      val result = controller.post()(fakeUnauthorizedXmlRequest)
-      status(result) mustEqual UNAUTHORIZED
-    }
-  }
 
 }
