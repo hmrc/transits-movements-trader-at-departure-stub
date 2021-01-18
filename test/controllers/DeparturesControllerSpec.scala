@@ -228,28 +228,28 @@ class DeparturesControllerSpec
     }
 
     "POST IE015 with invalid headers and valid bearer token" - {
-      "should return 202 Accepted" in {
+      "should return 400 BadRequest" in {
         val result = controller.gbpost()(fakeInvalidXmlRequest(routes.DeparturesController.gbpost().url, appConfig.eisgbBearerToken))
         status(result) mustEqual BAD_REQUEST
       }
     }
 
     "POST IE015 with no Authorization header specified in request" - {
-      "should return 401 Unauthorized" in {
+      "should return 403 Forbidden" in {
         val result = controller.gbpost()(fakeUnauthorizedEmptyHeaderXmlRequest(routes.DeparturesController.gbpost().url))
         status(result) mustEqual FORBIDDEN
       }
     }
 
     "POST IE015 with no value specified for Authorization header in request" - {
-      "should return 401 Unauthorized" in {
+      "should return 403 Forbidden" in {
         val result = controller.gbpost()(fakeUnauthorizedEmptyHeaderValueXmlRequest(routes.DeparturesController.gbpost().url))
         status(result) mustEqual FORBIDDEN
       }
     }
 
     "POST IE015 with invalid bearer token" - {
-      "should return 401 Unauthorized" in {
+      "should return 403 Forbidden" in {
         val result = controller.gbpost()(fakeUnauthorizedXmlRequest(routes.DeparturesController.gbpost().url))
         status(result) mustEqual FORBIDDEN
       }
@@ -265,28 +265,28 @@ class DeparturesControllerSpec
     }
 
     "POST IE015 with invalid headers and valid bearer token" - {
-      "should return 202 Accepted" in {
+      "should return 400 BadRequest" in {
         val result = controller.nipost()(fakeInvalidXmlRequest(routes.DeparturesController.nipost().url, appConfig.eisniBearerToken))
         status(result) mustEqual BAD_REQUEST
       }
     }
 
     "POST IE015 with no Authorization header specified in request" - {
-      "should return 401 Unauthorized" in {
+      "should return 403 Forbidden" in {
         val result = controller.nipost()(fakeUnauthorizedEmptyHeaderXmlRequest(routes.DeparturesController.nipost().url))
         status(result) mustEqual FORBIDDEN
       }
     }
 
     "POST IE015 with no value specified for Authorization header in request" - {
-      "should return 401 Unauthorized" in {
+      "should return 403 Forbidden" in {
         val result = controller.nipost()(fakeUnauthorizedEmptyHeaderValueXmlRequest(routes.DeparturesController.nipost().url))
         status(result) mustEqual FORBIDDEN
       }
     }
 
     "POST IE015 with invalid bearer token" - {
-      "should return 401 Unauthorized" in {
+      "should return 403 Forbidden" in {
         val result = controller.nipost()(fakeUnauthorizedXmlRequest(routes.DeparturesController.nipost().url))
         status(result) mustEqual FORBIDDEN
       }
