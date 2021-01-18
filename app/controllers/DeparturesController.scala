@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 HM Revenue & Customs
+ * Copyright 2021 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -31,23 +31,30 @@ import scala.xml.NodeSeq
 class DeparturesController @Inject()(appConfig: AppConfig, cc: ControllerComponents, headerValidatorService: HeaderValidatorService, jsonUtils: JsonUtils)
     extends BackendController(cc) {
 
-  def post: Action[NodeSeq] = Action.async(parse.xml) {
+  val logger = Logger(this.getClass)
+
+  def gbpost: Action[NodeSeq] = internal_post("gb endpoint called", appConfig.eisgbBearerToken)
+
+  def nipost: Action[NodeSeq] = internal_post("ni endpoint called", appConfig.eisniBearerToken)
+
+  private def internal_post(logMessage: String, bearerToken: String): Action[NodeSeq] = Action.async(parse.xml) {
     implicit request: Request[NodeSeq] =>
+      logger.info(logMessage)
       request.headers.get(HeaderNames.AUTHORIZATION) match {
         case Some(value) =>
-          if (value == s"Bearer ${appConfig.eisBearerToken}") {
+          if (value == s"Bearer $bearerToken") {
             if (headerValidatorService.validate(request.headers)) {
-              Logger.warn(s"validated XML ${request.body.toString()}")
+              logger.warn(s"validated XML ${request.body.toString()}")
               Future.successful(Accepted)
             } else {
-              Logger.warn("FAILED VALIDATING headers")
+              logger.warn("FAILED VALIDATING headers")
               Future.successful(BadRequest)
             }
           } else {
-            Future.successful(Unauthorized)
+            Future.successful(Forbidden)
           }
         case None =>
-          Future.successful(Unauthorized)
+          Future.successful(Forbidden)
       }
   }
 
