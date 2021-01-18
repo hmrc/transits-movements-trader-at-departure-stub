@@ -31,45 +31,30 @@ import scala.xml.NodeSeq
 class DeparturesController @Inject()(appConfig: AppConfig, cc: ControllerComponents, headerValidatorService: HeaderValidatorService, jsonUtils: JsonUtils)
     extends BackendController(cc) {
 
-  def gbpost: Action[NodeSeq] = Action.async(parse.xml) {
-    implicit request: Request[NodeSeq] =>
-      Logger.info("gb endpoint called")
-      request.headers.get(HeaderNames.AUTHORIZATION) match {
-        case Some(value) =>
-          if (value == s"Bearer ${appConfig.eisgbBearerToken}") {
-            if (headerValidatorService.validate(request.headers)) {
-              Logger.warn(s"validated XML ${request.body.toString()}")
-              Future.successful(Accepted)
-            } else {
-              Logger.warn("FAILED VALIDATING headers")
-              Future.successful(BadRequest)
-            }
-          } else {
-            Future.successful(Unauthorized)
-          }
-        case None =>
-          Future.successful(Unauthorized)
-      }
-  }
+  val logger = Logger(this.getClass)
 
-  def nipost: Action[NodeSeq] = Action.async(parse.xml) {
+  def gbpost: Action[NodeSeq] = internal_post("gb endpoint called", appConfig.eisgbBearerToken)
+
+  def nipost: Action[NodeSeq] = internal_post("ni endpoint called", appConfig.eisniBearerToken)
+
+  private def internal_post(logMessage: String, bearerToken: String): Action[NodeSeq] = Action.async(parse.xml) {
     implicit request: Request[NodeSeq] =>
-      Logger.info("ni endpoint called")
+      logger.info(logMessage)
       request.headers.get(HeaderNames.AUTHORIZATION) match {
         case Some(value) =>
-          if (value == s"Bearer ${appConfig.eisniBearerToken}") {
+          if (value == s"Bearer $bearerToken") {
             if (headerValidatorService.validate(request.headers)) {
-              Logger.warn(s"validated XML ${request.body.toString()}")
+              logger.warn(s"validated XML ${request.body.toString()}")
               Future.successful(Accepted)
             } else {
-              Logger.warn("FAILED VALIDATING headers")
+              logger.warn("FAILED VALIDATING headers")
               Future.successful(BadRequest)
             }
           } else {
-            Future.successful(Unauthorized)
+            Future.successful(Forbidden)
           }
         case None =>
-          Future.successful(Unauthorized)
+          Future.successful(Forbidden)
       }
   }
 
