@@ -34,6 +34,9 @@ class DepartureRejectionControllerSpec extends AnyFreeSpec with Matchers with Gu
   private val declarationCancellationId: Int = 45
   private val declarationCancellationMessageId: Int = 2
   private val invalidDepartureId = 11111
+  private val NoReleaseForTransitId: Int = 31
+  private val NoReleaseForTransitMessageId: Int = 2
+
 
   "DepartureRejectionControllerSpec" - {
 
@@ -69,6 +72,15 @@ class DepartureRejectionControllerSpec extends AnyFreeSpec with Matchers with Gu
       "must return declaration cancellation summary" in {
 
         val request = FakeRequest(GET, routes.DepartureRejectionController.getSummary(declarationCancellationId).url)
+        val result = route(app, request).value
+
+        status(result) mustEqual OK
+        contentType(result).get mustEqual "application/json"
+      }
+
+      "must return no release for transit message summary" in {
+
+        val request = FakeRequest(GET, routes.DepartureRejectionController.getSummary(NoReleaseForTransitId).url)
         val result = route(app, request).value
 
         status(result) mustEqual OK
@@ -129,6 +141,15 @@ class DepartureRejectionControllerSpec extends AnyFreeSpec with Matchers with Gu
         val result = route(app, request).value
 
         status(result) mustEqual BAD_REQUEST
+      }
+
+      "must return no release eor transit message" in {
+
+        val request = FakeRequest(GET, routes.DepartureRejectionController.getMessage(NoReleaseForTransitId, NoReleaseForTransitMessageId).url)
+        val result = route(app, request).value
+
+        status(result) mustEqual OK
+        contentType(result).get mustEqual "application/json"
       }
 
     }
