@@ -31,6 +31,8 @@ class DepartureRejectionController @Inject()(cc: ControllerComponents, jsonUtils
   private val CancellationDecisionUpdateMessageId: Int = 2
   private val DeclarationCancellationId: Int = 45
   private val DeclarationCancellationMessageId: Int = 2
+  private val NoReleaseForTransitId: Int = 31
+  private val NoReleaseForTransitMessageId: Int = 2
 
   def getSummary(departureId: Int): Action[AnyContent] = Action {
     implicit request =>
@@ -47,6 +49,9 @@ class DepartureRejectionController @Inject()(cc: ControllerComponents, jsonUtils
         case DeclarationCancellationId =>
           val json = jsonUtils.readJsonFromFile("conf/resources/departure-summary-user-submits-declaration-cancellation.json")
           Ok(json).as("application/json")
+        case NoReleaseForTransitId =>
+          val json = jsonUtils.readJsonFromFile("conf/resources/departure-summary-no-release-for-transit.json")
+          Ok(json).as("application/json")
         case _ => BadRequest
       }
   }
@@ -58,6 +63,7 @@ class DepartureRejectionController @Inject()(cc: ControllerComponents, jsonUtils
         case (DeclarationRejectionDepartureId, DeclarationRejectionMessageId) => Ok(jsonUtils.readJsonFromFile("conf/resources/declaration-rejection.json")).as("application/json")
         case (CancellationDecisionUpdateId, CancellationDecisionUpdateMessageId) => Ok(jsonUtils.readJsonFromFile("conf/resources/cancellation-decision-message-status-update.json")).as("application/json")
         case (DeclarationCancellationId, DeclarationCancellationMessageId) => Ok(jsonUtils.readJsonFromFile("conf/resources/user-submits-declaration-cancellation.json")).as("application/json")
+        case (NoReleaseForTransitId, NoReleaseForTransitMessageId) => Ok(jsonUtils.readJsonFromFile("conf/resources/no-release-for-transit.json")).as("application/json")
         case _ => BadRequest
       }
   }
