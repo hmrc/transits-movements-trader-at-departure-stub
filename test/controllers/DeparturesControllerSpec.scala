@@ -23,11 +23,11 @@ import org.scalatest.OptionValues
 import org.scalatest.freespec.AnyFreeSpec
 import org.scalatest.matchers.must.Matchers
 import org.scalatestplus.play.guice.GuiceOneAppPerSuite
-import play.api.http.{HeaderNames, MimeTypes}
-import play.api.{Configuration, Environment, Mode}
-import play.api.test.{FakeHeaders, FakeRequest, Helpers}
+import play.api.http.HeaderNames
 import play.api.test.Helpers._
-import services.{HeaderValidatorService, HeaderValidatorServiceImpl}
+import play.api.test.{FakeHeaders, FakeRequest, Helpers}
+import play.api.{Configuration, Environment, Mode}
+import services.HeaderValidatorServiceImpl
 import uk.gov.hmrc.play.bootstrap.config.{RunMode, ServicesConfig}
 import utils.JsonUtils
 

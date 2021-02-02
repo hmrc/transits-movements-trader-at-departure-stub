@@ -36,6 +36,9 @@ class DepartureRejectionControllerSpec extends AnyFreeSpec with Matchers with Gu
   private val invalidDepartureId = 11111
   private val NoReleaseForTransitId: Int = 31
   private val NoReleaseForTransitMessageId: Int = 2
+  private val controlDecisionId: Int = 32
+  private val controlDecisionMessageId: Int = 2
+
 
 
   "DepartureRejectionControllerSpec" - {
@@ -87,6 +90,16 @@ class DepartureRejectionControllerSpec extends AnyFreeSpec with Matchers with Gu
         contentType(result).get mustEqual "application/json"
       }
 
+      "must return control decision for transit message summary" in {
+
+        val request = FakeRequest(GET, routes.DepartureRejectionController.getSummary(controlDecisionId).url)
+        val result = route(app, request).value
+
+        status(result) mustEqual OK
+        contentType(result).get mustEqual "application/json"
+      }
+
+
       "must return BadRequest for invalid input" in {
 
         val request = FakeRequest(GET, routes.DepartureRejectionController.getSummary(invalidDepartureId).url)
@@ -134,6 +147,16 @@ class DepartureRejectionControllerSpec extends AnyFreeSpec with Matchers with Gu
         status(result) mustEqual OK
         contentType(result).get mustEqual "application/json"
       }
+
+      "must return control decision message" in {
+
+        val request = FakeRequest(GET, routes.DepartureRejectionController.getMessage(controlDecisionId, controlDecisionMessageId).url)
+        val result = route(app, request).value
+
+        status(result) mustEqual OK
+        contentType(result).get mustEqual "application/json"
+      }
+
 
       "must return BadRequest for invalid inputs" in {
 
