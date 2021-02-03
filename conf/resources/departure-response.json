@@ -54,7 +54,7 @@
     {
       "departureId": 32,
       "eoriNumber": "GB12345",
-      "referenceNumber": "LRN123470",
+      "referenceNumber": "LRN123471",
       "status": "ControlDecision",
       "created": "2020-09-09T09:35:16.392",
       "updated": "2020-09-14T11:35:16.392",
