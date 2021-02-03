@@ -74,7 +74,7 @@
     "eoriNumber": "GB12345",
     "referenceNumber": "LRN123459",
     "status": "TransitDeclarationRejected",
-    "crea   ted": "2020-09-09T09:35:16.392",
+    "created": "2020-09-09T09:35:16.392",
     "updated": "2020-09-14T11:35:16.392",
     "nextMessageCorrelationId": 2,
     "messages": [
