@@ -26,9 +26,9 @@ import org.scalatestplus.play.guice.GuiceOneAppPerSuite
 import play.api.http.HeaderNames
 import play.api.test.Helpers._
 import play.api.test.{FakeHeaders, FakeRequest, Helpers}
-import play.api.{Configuration, Environment, Mode}
+import play.api.{Configuration, Environment}
 import services.HeaderValidatorServiceImpl
-import uk.gov.hmrc.play.bootstrap.config.{RunMode, ServicesConfig}
+import uk.gov.hmrc.play.bootstrap.config.ServicesConfig
 import utils.JsonUtils
 
 class DeparturesControllerSpec
@@ -44,7 +44,7 @@ class DeparturesControllerSpec
   private val env           = Environment.simple()
   private val configuration = Configuration.load(env)
 
-  private val serviceConfig = new ServicesConfig(configuration, new RunMode(configuration, Mode.Dev))
+  private val serviceConfig = new ServicesConfig(configuration)
   private val appConfig     = new AppConfig(configuration, serviceConfig)
   private val jsonUtils     = new JsonUtils(env)
   private val headerValidator = new HeaderValidatorServiceImpl()
