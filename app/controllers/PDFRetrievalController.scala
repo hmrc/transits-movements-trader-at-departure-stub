@@ -23,10 +23,13 @@ import java.io.File
 import java.nio.file.Files
 import javax.inject.Inject
 
-class PDFRetrievalController @Inject()(cc: ControllerComponents) extends BackendController(cc){
+class PDFRetrievalController @Inject()(cc: ControllerComponents)
+    extends BackendController(cc) {
 
-  def getTransitAccompanyingDocument(departureId: Int): Action[AnyContent] = Action {
-    val blankPdf = Files.readAllBytes(new File(getClass.getResource(s"/files/EmptyTAD.pdf").getPath).toPath)
-    Ok(blankPdf)
-  }
+  def getTransitAccompanyingDocument(departureId: Int): Action[AnyContent] =
+    Action {
+      val blankPdf = Files.readAllBytes(
+        new File(getClass.getResource(s"/files/EmptyTAD.pdf").getPath).toPath)
+      Ok(blankPdf)
+    }
 }

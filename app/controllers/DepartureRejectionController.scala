@@ -21,7 +21,9 @@ import play.api.mvc.{Action, AnyContent, ControllerComponents}
 import uk.gov.hmrc.play.bootstrap.controller.BackendController
 import utils.JsonUtils
 
-class DepartureRejectionController @Inject()(cc: ControllerComponents, jsonUtils: JsonUtils) extends BackendController(cc) {
+class DepartureRejectionController @Inject()(cc: ControllerComponents,
+                                             jsonUtils: JsonUtils)
+    extends BackendController(cc) {
 
   private val GuaranteeNotValidDepartureId: Int = 27
   private val GuaranteeNotValidMessageId: Int = 2
@@ -39,22 +41,28 @@ class DepartureRejectionController @Inject()(cc: ControllerComponents, jsonUtils
   def getSummary(departureId: Int): Action[AnyContent] = Action {
     departureId match {
       case GuaranteeNotValidDepartureId =>
-        val json = jsonUtils.readJsonFromFile("conf/resources/departure-summary-guarantee-not-valid.json")
+        val json = jsonUtils.readJsonFromFile(
+          "conf/resources/departure-summary-guarantee-not-valid.json")
         Ok(json).as("application/json")
       case DeclarationRejectionDepartureId =>
-        val json = jsonUtils.readJsonFromFile("conf/resources/departure-summary-declaration-rejection.json")
+        val json = jsonUtils.readJsonFromFile(
+          "conf/resources/departure-summary-declaration-rejection.json")
         Ok(json).as("application/json")
       case CancellationDecisionUpdateId =>
-        val json = jsonUtils.readJsonFromFile("conf/resources/departure-summary-cancellation-decision-update.json")
+        val json = jsonUtils.readJsonFromFile(
+          "conf/resources/departure-summary-cancellation-decision-update.json")
         Ok(json).as("application/json")
       case DeclarationCancellationId =>
-        val json = jsonUtils.readJsonFromFile("conf/resources/departure-summary-user-submits-declaration-cancellation.json")
+        val json = jsonUtils.readJsonFromFile(
+          "conf/resources/departure-summary-user-submits-declaration-cancellation.json")
         Ok(json).as("application/json")
       case NoReleaseForTransitId =>
-        val json = jsonUtils.readJsonFromFile("conf/resources/departure-summary-no-release-for-transit.json")
+        val json = jsonUtils.readJsonFromFile(
+          "conf/resources/departure-summary-no-release-for-transit.json")
         Ok(json).as("application/json")
       case ControlDecisionId =>
-        val json = jsonUtils.readJsonFromFile("conf/resources/departure-summary-control-decision.json")
+        val json = jsonUtils.readJsonFromFile(
+          "conf/resources/departure-summary-control-decision.json")
         Ok(json).as("application/json")
       case _ => BadRequest
     }
@@ -62,15 +70,34 @@ class DepartureRejectionController @Inject()(cc: ControllerComponents, jsonUtils
 
   def getMessage(arrivalId: Int, messageId: Int): Action[AnyContent] = Action {
     (arrivalId, messageId) match {
-      case (GuaranteeNotValidDepartureId, GuaranteeNotValidMessageId)           => Ok(jsonUtils.readJsonFromFile("conf/resources/guarantee-not-valid-rejection.json")).as("application/json")
-      case (DeclarationRejectionDepartureId, DeclarationRejectionMessageId)     => Ok(jsonUtils.readJsonFromFile("conf/resources/declaration-rejection.json")).as("application/json")
-      case (CancellationDecisionUpdateId, CancellationDecisionUpdateMessageId)  => Ok(jsonUtils.readJsonFromFile("conf/resources/cancellation-decision-message-status-update.json")).as("application/json")
-      case (DeclarationCancellationId, DeclarationCancellationMessageId)        => Ok(jsonUtils.readJsonFromFile("conf/resources/user-submits-declaration-cancellation.json")).as("application/json")
-      case (NoReleaseForTransitId, NoReleaseForTransitMessageId)                => Ok(jsonUtils.readJsonFromFile("conf/resources/no-release-for-transit.json")).as("application/json")
-      case (ControlDecisionId, ControlDecisionMessageId)                        => Ok(jsonUtils.readJsonFromFile("conf/resources/control-decision.json")).as("application/json")
-      case _                                                                    => BadRequest
+      case (GuaranteeNotValidDepartureId, GuaranteeNotValidMessageId) =>
+        Ok(
+          jsonUtils.readJsonFromFile(
+            "conf/resources/guarantee-not-valid-rejection.json"))
+          .as("application/json")
+      case (DeclarationRejectionDepartureId, DeclarationRejectionMessageId) =>
+        Ok(
+          jsonUtils.readJsonFromFile(
+            "conf/resources/declaration-rejection.json")).as("application/json")
+      case (CancellationDecisionUpdateId,
+            CancellationDecisionUpdateMessageId) =>
+        Ok(
+          jsonUtils.readJsonFromFile(
+            "conf/resources/cancellation-decision-message-status-update.json"))
+          .as("application/json")
+      case (DeclarationCancellationId, DeclarationCancellationMessageId) =>
+        Ok(
+          jsonUtils.readJsonFromFile(
+            "conf/resources/user-submits-declaration-cancellation.json"))
+          .as("application/json")
+      case (NoReleaseForTransitId, NoReleaseForTransitMessageId) =>
+        Ok(jsonUtils.readJsonFromFile(
+          "conf/resources/no-release-for-transit.json")).as("application/json")
+      case (ControlDecisionId, ControlDecisionMessageId) =>
+        Ok(jsonUtils.readJsonFromFile("conf/resources/control-decision.json"))
+          .as("application/json")
+      case _ => BadRequest
     }
   }
-
 
 }

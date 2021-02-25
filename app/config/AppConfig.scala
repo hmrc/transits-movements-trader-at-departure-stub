@@ -32,6 +32,8 @@ class AppConfig @Inject()(config: Configuration,
   val graphiteHost: String =
     config.get[String]("microservice.metrics.graphite.host")
 
-  val eisgbBearerToken: String     = config.get[String]("microservice.services.eis.gb.headers.bearerToken")
-  val eisniBearerToken: String     = config.get[String]("microservice.services.eis.ni.headers.bearerToken")
+  val eisgbBearerToken: String =
+    config.get[String]("microservice.services.eis.gb.headers.bearerToken")
+  val eisniBearerToken: String =
+    config.get[String]("microservice.services.eis.ni.headers.bearerToken")
 }

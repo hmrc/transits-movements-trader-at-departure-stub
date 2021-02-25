@@ -28,17 +28,24 @@ import utils.JsonUtils
 import scala.concurrent.Future
 import scala.xml.NodeSeq
 
-class DeparturesController @Inject()(appConfig: AppConfig, cc: ControllerComponents, headerValidatorService: HeaderValidatorService, jsonUtils: JsonUtils)
+class DeparturesController @Inject()(
+    appConfig: AppConfig,
+    cc: ControllerComponents,
+    headerValidatorService: HeaderValidatorService,
+    jsonUtils: JsonUtils)
     extends BackendController(cc) {
 
   val logger = Logger(this.getClass)
 
-  def gbpost: Action[NodeSeq] = internal_post("gb endpoint called", appConfig.eisgbBearerToken)
+  def gbpost: Action[NodeSeq] =
+    internal_post("gb endpoint called", appConfig.eisgbBearerToken)
 
-  def nipost: Action[NodeSeq] = internal_post("ni endpoint called", appConfig.eisniBearerToken)
+  def nipost: Action[NodeSeq] =
+    internal_post("ni endpoint called", appConfig.eisniBearerToken)
 
-  private def internal_post(logMessage: String, bearerToken: String): Action[NodeSeq] = Action.async(parse.xml) {
-    implicit request: Request[NodeSeq] =>
+  private def internal_post(logMessage: String,
+                            bearerToken: String): Action[NodeSeq] =
+    Action.async(parse.xml) { implicit request: Request[NodeSeq] =>
       logger.info(logMessage)
       request.headers.get(HeaderNames.AUTHORIZATION) match {
         case Some(value) =>
@@ -56,12 +63,12 @@ class DeparturesController @Inject()(appConfig: AppConfig, cc: ControllerCompone
         case None =>
           Future.successful(Forbidden)
       }
-  }
+    }
 
-  def get: Action[AnyContent] = Action {
-    implicit request =>
-      val json = jsonUtils.readJsonFromFile("conf/resources/departure-response.json")
+  def get: Action[AnyContent] = Action { implicit request =>
+    val json =
+      jsonUtils.readJsonFromFile("conf/resources/departure-response.json")
 
-      Ok(json).as("application/json")
+    Ok(json).as("application/json")
   }
 }

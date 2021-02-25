@@ -19,10 +19,15 @@ package controllers
 import org.scalatest.freespec.AnyFreeSpec
 import org.scalatest.matchers.must.Matchers
 import play.api.test.FakeRequest
-import play.api.test.Helpers.{status, stubControllerComponents, defaultAwaitTimeout, OK, contentType}
+import play.api.test.Helpers.{
+  status,
+  stubControllerComponents,
+  defaultAwaitTimeout,
+  OK,
+  contentType
+}
 
-class PDFRetrievalControllerSpec extends AnyFreeSpec
-with Matchers {
+class PDFRetrievalControllerSpec extends AnyFreeSpec with Matchers {
 
   val controller = new PDFRetrievalController(stubControllerComponents())
 
