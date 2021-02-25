@@ -38,7 +38,8 @@ class HeaderValidatorServiceSpec extends AnyFreeSpec with Matchers {
         "X-Message-Sender" -> "MDTP-000000000000000000000000011-01"
       )
 
-      val result = headerValidatorServiceSpec.validate(new Headers(validHeaders))
+      val result =
+        headerValidatorServiceSpec.validate(new Headers(validHeaders))
 
       result mustBe true
     }
@@ -53,7 +54,8 @@ class HeaderValidatorServiceSpec extends AnyFreeSpec with Matchers {
         "Accept" -> "application/xml"
       )
 
-      val result = headerValidatorServiceSpec.validate(new Headers(invalidHeaders))
+      val result =
+        headerValidatorServiceSpec.validate(new Headers(invalidHeaders))
 
       result mustBe false
     }
