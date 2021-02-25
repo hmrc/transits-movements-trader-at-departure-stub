@@ -1,8 +1,10 @@
 # microservice specific routes
 
-POST   /movements/departures/gb                                 controllers.DeparturesController.gbpost
-POST   /movements/departures/ni                                 controllers.DeparturesController.nipost
-GET    /movements/departures                                    controllers.DeparturesController.get
+POST   /movements/departures/gb                                             controllers.DeparturesController.gbpost
+POST   /movements/departures/ni                                             controllers.DeparturesController.nipost
+GET    /movements/departures                                                controllers.DeparturesController.get
 
-GET    /movements/departures/:departureId/messages/summary      controllers.DepartureRejectionController.getSummary(departureId: Int)
-GET    /movements/departures/:departureId/messages/:messageId   controllers.DepartureRejectionController.getMessage(departureId: Int, messageId: Int)
+GET    /movements/departures/:departureId/messages/summary                  controllers.DepartureRejectionController.getSummary(departureId: Int)
+GET    /movements/departures/:departureId/messages/:messageId               controllers.DepartureRejectionController.getMessage(departureId: Int, messageId: Int)
+
+GET    /movements/departures/:departureId/transit-accompanying-document     controllers.PDFRetrievalController.getTransitAccompanyingDocument(departureId: Int)
