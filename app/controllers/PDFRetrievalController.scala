@@ -19,8 +19,7 @@ package controllers
 import play.api.mvc.{Action, AnyContent, ControllerComponents}
 import uk.gov.hmrc.play.bootstrap.controller.BackendController
 
-import java.io.File
-import java.nio.file.Files
+import java.nio.file.{Files, Paths}
 import javax.inject.Inject
 
 class PDFRetrievalController @Inject()(cc: ControllerComponents)
@@ -28,8 +27,8 @@ class PDFRetrievalController @Inject()(cc: ControllerComponents)
 
   def getTransitAccompanyingDocument(departureId: Int): Action[AnyContent] =
     Action {
-      val blankPdf = Files.readAllBytes(
-        new File(getClass.getResource(s"/files/EmptyTAD.pdf").getPath).toPath)
+      val path = Paths.get(getClass.getResource("/files/EmptyTAD.pdf").toURI)
+      val blankPdf = Files.readAllBytes(path)
       Ok(blankPdf)
     }
 }
