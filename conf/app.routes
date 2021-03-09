@@ -3,6 +3,7 @@
 POST   /movements/departures/gb                                             controllers.DeparturesController.gbpost
 POST   /movements/departures/ni                                             controllers.DeparturesController.nipost
 GET    /movements/departures                                                controllers.DeparturesController.get
+GET    /movements/departures/:departureId                                   controllers.DeparturesController.getDeparture(departureId: Int)
 
 GET    /movements/departures/:departureId/messages/summary                  controllers.DepartureRejectionController.getSummary(departureId: Int)
 GET    /movements/departures/:departureId/messages/:messageId               controllers.DepartureRejectionController.getMessage(departureId: Int, messageId: Int)

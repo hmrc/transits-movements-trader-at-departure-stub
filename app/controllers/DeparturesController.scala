@@ -71,4 +71,11 @@ class DeparturesController @Inject()(
 
     Ok(json).as("application/json")
   }
+
+  def getDeparture(departureId: Int): Action[AnyContent] = Action { implicit request =>
+    val json =
+      jsonUtils.readJsonFromFile("conf/resources/single-departure-response.json")
+
+    Ok(json).as("application/json")
+  }
 }
