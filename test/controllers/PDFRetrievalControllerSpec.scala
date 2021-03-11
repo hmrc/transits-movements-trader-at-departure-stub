@@ -19,13 +19,7 @@ package controllers
 import org.scalatest.freespec.AnyFreeSpec
 import org.scalatest.matchers.must.Matchers
 import play.api.test.FakeRequest
-import play.api.test.Helpers.{
-  status,
-  stubControllerComponents,
-  defaultAwaitTimeout,
-  OK,
-  contentType
-}
+import play.api.test.Helpers.{contentType, defaultAwaitTimeout, status, stubControllerComponents, OK}
 
 class PDFRetrievalControllerSpec extends AnyFreeSpec with Matchers {
 

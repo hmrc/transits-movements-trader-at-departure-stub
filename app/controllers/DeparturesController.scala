@@ -28,11 +28,7 @@ import utils.JsonUtils
 import scala.concurrent.Future
 import scala.xml.NodeSeq
 
-class DeparturesController @Inject()(
-    appConfig: AppConfig,
-    cc: ControllerComponents,
-    headerValidatorService: HeaderValidatorService,
-    jsonUtils: JsonUtils)
+class DeparturesController @Inject()(appConfig: AppConfig, cc: ControllerComponents, headerValidatorService: HeaderValidatorService, jsonUtils: JsonUtils)
     extends BackendController(cc) {
 
   val logger = Logger(this.getClass)
@@ -43,40 +39,40 @@ class DeparturesController @Inject()(
   def nipost: Action[NodeSeq] =
     internal_post("ni endpoint called", appConfig.eisniBearerToken)
 
-  private def internal_post(logMessage: String,
-                            bearerToken: String): Action[NodeSeq] =
-    Action.async(parse.xml) { implicit request: Request[NodeSeq] =>
-      logger.info(logMessage)
-      request.headers.get(HeaderNames.AUTHORIZATION) match {
-        case Some(value) =>
-          if (value == s"Bearer $bearerToken") {
-            if (headerValidatorService.validate(request.headers)) {
-              logger.warn(s"validated XML ${request.body.toString()}")
-              Future.successful(Accepted)
+  private def internal_post(logMessage: String, bearerToken: String): Action[NodeSeq] =
+    Action.async(parse.xml) {
+      implicit request: Request[NodeSeq] =>
+        logger.info(logMessage)
+        request.headers.get(HeaderNames.AUTHORIZATION) match {
+          case Some(value) =>
+            if (value == s"Bearer $bearerToken") {
+              if (headerValidatorService.validate(request.headers)) {
+                logger.warn(s"validated XML ${request.body.toString()}")
+                Future.successful(Accepted)
+              } else {
+                logger.warn("FAILED VALIDATING headers")
+                Future.successful(BadRequest)
+              }
             } else {
-              logger.warn("FAILED VALIDATING headers")
-              Future.successful(BadRequest)
+              Future.successful(Forbidden)
             }
-          } else {
+          case None =>
             Future.successful(Forbidden)
-          }
-        case None =>
-          Future.successful(Forbidden)
-      }
+        }
     }
 
-  def get: Action[AnyContent] = Action { implicit request =>
-    val json =
-      jsonUtils.readJsonFromFile("conf/resources/departure-response.json")
+  def get: Action[AnyContent] = Action {
+    implicit request =>
+      val json =
+        jsonUtils.readJsonFromFile("conf/resources/departure-response.json")
 
-    Ok(json).as("application/json")
+      Ok(json).as("application/json")
   }
 
   def getDeparture(departureId: Int): Action[AnyContent] = Action {
     implicit request =>
       val json =
-        jsonUtils.readJsonFromFile(
-          "conf/resources/single-departure-response.json")
+        jsonUtils.readJsonFromFile("conf/resources/single-departure-response.json")
 
       Ok(json).as("application/json")
   }
