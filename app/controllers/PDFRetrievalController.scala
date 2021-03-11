@@ -22,12 +22,11 @@ import uk.gov.hmrc.play.bootstrap.controller.BackendController
 import java.nio.file.{Files, Paths}
 import javax.inject.Inject
 
-class PDFRetrievalController @Inject()(cc: ControllerComponents)
-    extends BackendController(cc) {
+class PDFRetrievalController @Inject()(cc: ControllerComponents) extends BackendController(cc) {
 
   def getTransitAccompanyingDocument(departureId: Int): Action[AnyContent] =
     Action {
-      val path = Paths.get(getClass.getResource("/files/EmptyTAD.pdf").toURI)
+      val path     = Paths.get(getClass.getResource("/files/EmptyTAD.pdf").toURI)
       val blankPdf = Files.readAllBytes(path)
       Ok(blankPdf)
     }

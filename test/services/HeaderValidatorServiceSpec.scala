@@ -30,12 +30,12 @@ class HeaderValidatorServiceSpec extends AnyFreeSpec with Matchers {
 
       val validHeaders: Seq[(String, String)] = Seq(
         "CustomProcessHost" -> "Digital",
-        "X-Correlation-ID" -> "137302f5-71ae-40a4-bd92-cac2ae7sde2f",
-        "Date" -> "Tue, 29 Sep 2020 11:46:50 +0100",
-        "Content-Type" -> "application/xml",
-        "Accept" -> "application/xml",
-        "X-Message-Type" -> "IE015",
-        "X-Message-Sender" -> "MDTP-000000000000000000000000011-01"
+        "X-Correlation-ID"  -> "137302f5-71ae-40a4-bd92-cac2ae7sde2f",
+        "Date"              -> "Tue, 29 Sep 2020 11:46:50 +0100",
+        "Content-Type"      -> "application/xml",
+        "Accept"            -> "application/xml",
+        "X-Message-Type"    -> "IE015",
+        "X-Message-Sender"  -> "MDTP-000000000000000000000000011-01"
       )
 
       val result =
@@ -48,10 +48,10 @@ class HeaderValidatorServiceSpec extends AnyFreeSpec with Matchers {
 
       val invalidHeaders: Seq[(String, String)] = Seq(
         "CustomProcessHost" -> "Digital",
-        "X-Correlation-ID" -> "137302f5-71ae-40a4-bd92-cac2ae7sde2f",
-        "Date" -> "Tue, 29 Sep 2020 11:46:50 +0100",
-        "Content-Type" -> "application/xml",
-        "Accept" -> "application/xml"
+        "X-Correlation-ID"  -> "137302f5-71ae-40a4-bd92-cac2ae7sde2f",
+        "Date"              -> "Tue, 29 Sep 2020 11:46:50 +0100",
+        "Content-Type"      -> "application/xml",
+        "Accept"            -> "application/xml"
       )
 
       val result =

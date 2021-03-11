@@ -23,25 +23,21 @@ import org.scalatestplus.play.guice.GuiceOneAppPerSuite
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
 
-class DepartureRejectionControllerSpec
-    extends AnyFreeSpec
-    with Matchers
-    with GuiceOneAppPerSuite
-    with OptionValues {
+class DepartureRejectionControllerSpec extends AnyFreeSpec with Matchers with GuiceOneAppPerSuite with OptionValues {
 
-  private val departureId = 27
-  private val guaranteeInValidMessageId = 2
-  private val declarationRejectId = 33
-  private val declarationRejectMessageId = 2
-  private val cancellationDecisionUpdateId: Int = 39
+  private val departureId                              = 27
+  private val guaranteeInValidMessageId                = 2
+  private val declarationRejectId                      = 33
+  private val declarationRejectMessageId               = 2
+  private val cancellationDecisionUpdateId: Int        = 39
   private val cancellationDecisionUpdateMessageId: Int = 2
-  private val declarationCancellationId: Int = 45
-  private val declarationCancellationMessageId: Int = 2
-  private val invalidDepartureId = 11111
-  private val NoReleaseForTransitId: Int = 31
-  private val NoReleaseForTransitMessageId: Int = 2
-  private val controlDecisionId: Int = 32
-  private val controlDecisionMessageId: Int = 2
+  private val declarationCancellationId: Int           = 45
+  private val declarationCancellationMessageId: Int    = 2
+  private val invalidDepartureId                       = 11111
+  private val NoReleaseForTransitId: Int               = 31
+  private val NoReleaseForTransitMessageId: Int        = 2
+  private val controlDecisionId: Int                   = 32
+  private val controlDecisionMessageId: Int            = 2
 
   "DepartureRejectionControllerSpec" - {
 
@@ -49,10 +45,8 @@ class DepartureRejectionControllerSpec
 
       "must return departure summary" in {
 
-        val request = FakeRequest(
-          GET,
-          routes.DepartureRejectionController.getSummary(departureId).url)
-        val result = route(app, request).value
+        val request = FakeRequest(GET, routes.DepartureRejectionController.getSummary(departureId).url)
+        val result  = route(app, request).value
 
         status(result) mustEqual OK
         contentType(result).get mustEqual "application/json"
@@ -108,10 +102,8 @@ class DepartureRejectionControllerSpec
 
       "must return control decision for transit message summary" in {
 
-        val request = FakeRequest(
-          GET,
-          routes.DepartureRejectionController.getSummary(controlDecisionId).url)
-        val result = route(app, request).value
+        val request = FakeRequest(GET, routes.DepartureRejectionController.getSummary(controlDecisionId).url)
+        val result  = route(app, request).value
 
         status(result) mustEqual OK
         contentType(result).get mustEqual "application/json"
@@ -147,11 +139,10 @@ class DepartureRejectionControllerSpec
 
       "must return departure rejection message" in {
 
-        val request = FakeRequest(
-          GET,
-          routes.DepartureRejectionController
-            .getMessage(declarationRejectId, declarationRejectMessageId)
-            .url)
+        val request = FakeRequest(GET,
+                                  routes.DepartureRejectionController
+                                    .getMessage(declarationRejectId, declarationRejectMessageId)
+                                    .url)
         val result = route(app, request).value
 
         status(result) mustEqual OK
@@ -163,8 +154,7 @@ class DepartureRejectionControllerSpec
         val request =
           FakeRequest(GET,
                       routes.DepartureRejectionController
-                        .getMessage(cancellationDecisionUpdateId,
-                                    cancellationDecisionUpdateMessageId)
+                        .getMessage(cancellationDecisionUpdateId, cancellationDecisionUpdateMessageId)
                         .url)
         val result = route(app, request).value
 
@@ -177,8 +167,7 @@ class DepartureRejectionControllerSpec
         val request =
           FakeRequest(GET,
                       routes.DepartureRejectionController
-                        .getMessage(declarationCancellationId,
-                                    declarationCancellationMessageId)
+                        .getMessage(declarationCancellationId, declarationCancellationMessageId)
                         .url)
         val result = route(app, request).value
 
@@ -201,11 +190,10 @@ class DepartureRejectionControllerSpec
 
       "must return BadRequest for invalid inputs" in {
 
-        val request = FakeRequest(
-          GET,
-          routes.DepartureRejectionController
-            .getMessage(invalidDepartureId, guaranteeInValidMessageId)
-            .url)
+        val request = FakeRequest(GET,
+                                  routes.DepartureRejectionController
+                                    .getMessage(invalidDepartureId, guaranteeInValidMessageId)
+                                    .url)
         val result = route(app, request).value
 
         status(result) mustEqual BAD_REQUEST
@@ -213,11 +201,10 @@ class DepartureRejectionControllerSpec
 
       "must return no release eor transit message" in {
 
-        val request = FakeRequest(
-          GET,
-          routes.DepartureRejectionController
-            .getMessage(NoReleaseForTransitId, NoReleaseForTransitMessageId)
-            .url)
+        val request = FakeRequest(GET,
+                                  routes.DepartureRejectionController
+                                    .getMessage(NoReleaseForTransitId, NoReleaseForTransitMessageId)
+                                    .url)
         val result = route(app, request).value
 
         status(result) mustEqual OK

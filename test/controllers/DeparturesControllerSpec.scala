@@ -31,29 +31,21 @@ import services.HeaderValidatorServiceImpl
 import uk.gov.hmrc.play.bootstrap.config.ServicesConfig
 import utils.JsonUtils
 
-class DeparturesControllerSpec
-    extends AnyFreeSpec
-    with Matchers
-    with GuiceOneAppPerSuite
-    with OptionValues {
+class DeparturesControllerSpec extends AnyFreeSpec with Matchers with GuiceOneAppPerSuite with OptionValues {
 
   implicit val system: ActorSystem = ActorSystem("DeparturesControllerSpec")
 
   implicit def mat: Materializer = ActorMaterializer()
 
-  private val env = Environment.simple()
+  private val env           = Environment.simple()
   private val configuration = Configuration.load(env)
 
-  private val serviceConfig = new ServicesConfig(configuration)
-  private val appConfig = new AppConfig(configuration, serviceConfig)
-  private val jsonUtils = new JsonUtils(env)
+  private val serviceConfig   = new ServicesConfig(configuration)
+  private val appConfig       = new AppConfig(configuration, serviceConfig)
+  private val jsonUtils       = new JsonUtils(env)
   private val headerValidator = new HeaderValidatorServiceImpl()
 
-  private val controller = new DeparturesController(
-    appConfig,
-    Helpers.stubControllerComponents(),
-    headerValidator,
-    jsonUtils)
+  private val controller = new DeparturesController(appConfig, Helpers.stubControllerComponents(), headerValidator, jsonUtils)
 
   val CC015B = <CC015B>
     <SynIdeMES1>UNOC</SynIdeMES1>
@@ -177,100 +169,69 @@ class DeparturesControllerSpec
 
   val validHeaders: Seq[(String, String)] = Seq(
     "CustomProcessHost" -> "Digital",
-    "X-Correlation-ID" -> "137302f5-71ae-40a4-bd92-cac2ae7sde2f",
-    "Date" -> "Tue, 29 Sep 2020 11:46:50 +0100",
-    "Content-Type" -> "application/xml",
-    "Accept" -> "application/xml",
-    "X-Message-Type" -> "IE015",
-    "X-Message-Sender" -> "MDTP-000000000000000000000000011-01"
+    "X-Correlation-ID"  -> "137302f5-71ae-40a4-bd92-cac2ae7sde2f",
+    "Date"              -> "Tue, 29 Sep 2020 11:46:50 +0100",
+    "Content-Type"      -> "application/xml",
+    "Accept"            -> "application/xml",
+    "X-Message-Type"    -> "IE015",
+    "X-Message-Sender"  -> "MDTP-000000000000000000000000011-01"
   )
 
   val invalidHeaders: Seq[(String, String)] = Seq(
     "CustomProcessHost" -> "Digital",
-    "X-Correlation-ID" -> "137302f5-71ae-40a4-bd92-cac2ae7sde2f",
-    "Date" -> "Tue, 29 Sep 2020 11:46:50 +0100",
-    "Content-Type" -> "application/xml",
-    "Accept" -> "application/xml"
+    "X-Correlation-ID"  -> "137302f5-71ae-40a4-bd92-cac2ae7sde2f",
+    "Date"              -> "Tue, 29 Sep 2020 11:46:50 +0100",
+    "Content-Type"      -> "application/xml",
+    "Accept"            -> "application/xml"
   )
 
   private def fakeValidXmlRequest(route: String, bearerToken: String) =
-    FakeRequest(method = "POST",
-                uri = route,
-                headers = FakeHeaders(
-                  validHeaders ++ Seq(
-                    HeaderNames.AUTHORIZATION -> s"Bearer $bearerToken")),
-                body = CC015B)
+    FakeRequest(method = "POST", uri = route, headers = FakeHeaders(validHeaders ++ Seq(HeaderNames.AUTHORIZATION -> s"Bearer $bearerToken")), body = CC015B)
 
   private def fakeInvalidXmlRequest(route: String, bearerToken: String) =
-    FakeRequest(method = "POST",
-                uri = route,
-                headers = FakeHeaders(
-                  invalidHeaders ++ Seq(
-                    HeaderNames.AUTHORIZATION -> s"Bearer $bearerToken")),
-                body = CC015B)
+    FakeRequest(method = "POST", uri = route, headers = FakeHeaders(invalidHeaders ++ Seq(HeaderNames.AUTHORIZATION -> s"Bearer $bearerToken")), body = CC015B)
 
   private def fakeUnauthorizedEmptyHeaderXmlRequest(route: String) =
-    FakeRequest(method = "POST",
-                uri = route,
-                headers = FakeHeaders(validHeaders),
-                body = CC015B)
+    FakeRequest(method = "POST", uri = route, headers = FakeHeaders(validHeaders), body = CC015B)
 
   private def fakeUnauthorizedEmptyHeaderValueXmlRequest(route: String) =
-    FakeRequest(method = "POST",
-                uri = route,
-                headers = FakeHeaders(
-                  validHeaders ++ Seq(HeaderNames.AUTHORIZATION -> s"")),
-                body = CC015B)
+    FakeRequest(method = "POST", uri = route, headers = FakeHeaders(validHeaders ++ Seq(HeaderNames.AUTHORIZATION -> s"")), body = CC015B)
 
   private def fakeUnauthorizedXmlRequest(route: String) =
-    FakeRequest(
-      method = "POST",
-      uri = route,
-      headers = FakeHeaders(
-        validHeaders ++ Seq(HeaderNames.AUTHORIZATION -> s"Bearer 123")),
-      body = CC015B)
+    FakeRequest(method = "POST", uri = route, headers = FakeHeaders(validHeaders ++ Seq(HeaderNames.AUTHORIZATION -> s"Bearer 123")), body = CC015B)
 
   "gbpost" - {
     "POST IE015 with valid headers and valid bearer token" - {
       "should return 202 Accepted" in {
-        val result = controller.gbpost()(
-          fakeValidXmlRequest(routes.DeparturesController.gbpost().url,
-                              appConfig.eisgbBearerToken))
+        val result = controller.gbpost()(fakeValidXmlRequest(routes.DeparturesController.gbpost().url, appConfig.eisgbBearerToken))
         status(result) mustEqual ACCEPTED
       }
     }
 
     "POST IE015 with invalid headers and valid bearer token" - {
       "should return 400 BadRequest" in {
-        val result = controller.gbpost()(
-          fakeInvalidXmlRequest(routes.DeparturesController.gbpost().url,
-                                appConfig.eisgbBearerToken))
+        val result = controller.gbpost()(fakeInvalidXmlRequest(routes.DeparturesController.gbpost().url, appConfig.eisgbBearerToken))
         status(result) mustEqual BAD_REQUEST
       }
     }
 
     "POST IE015 with no Authorization header specified in request" - {
       "should return 403 Forbidden" in {
-        val result = controller.gbpost()(
-          fakeUnauthorizedEmptyHeaderXmlRequest(
-            routes.DeparturesController.gbpost().url))
+        val result = controller.gbpost()(fakeUnauthorizedEmptyHeaderXmlRequest(routes.DeparturesController.gbpost().url))
         status(result) mustEqual FORBIDDEN
       }
     }
 
     "POST IE015 with no value specified for Authorization header in request" - {
       "should return 403 Forbidden" in {
-        val result = controller.gbpost()(
-          fakeUnauthorizedEmptyHeaderValueXmlRequest(
-            routes.DeparturesController.gbpost().url))
+        val result = controller.gbpost()(fakeUnauthorizedEmptyHeaderValueXmlRequest(routes.DeparturesController.gbpost().url))
         status(result) mustEqual FORBIDDEN
       }
     }
 
     "POST IE015 with invalid bearer token" - {
       "should return 403 Forbidden" in {
-        val result = controller.gbpost()(
-          fakeUnauthorizedXmlRequest(routes.DeparturesController.gbpost().url))
+        val result = controller.gbpost()(fakeUnauthorizedXmlRequest(routes.DeparturesController.gbpost().url))
         status(result) mustEqual FORBIDDEN
       }
     }
@@ -279,44 +240,35 @@ class DeparturesControllerSpec
   "nipost" - {
     "POST IE015 with valid headers and valid bearer token" - {
       "should return 202 Accepted" in {
-        val result = controller.nipost()(
-          fakeValidXmlRequest(routes.DeparturesController.nipost().url,
-                              appConfig.eisniBearerToken))
+        val result = controller.nipost()(fakeValidXmlRequest(routes.DeparturesController.nipost().url, appConfig.eisniBearerToken))
         status(result) mustEqual ACCEPTED
       }
     }
 
     "POST IE015 with invalid headers and valid bearer token" - {
       "should return 400 BadRequest" in {
-        val result = controller.nipost()(
-          fakeInvalidXmlRequest(routes.DeparturesController.nipost().url,
-                                appConfig.eisniBearerToken))
+        val result = controller.nipost()(fakeInvalidXmlRequest(routes.DeparturesController.nipost().url, appConfig.eisniBearerToken))
         status(result) mustEqual BAD_REQUEST
       }
     }
 
     "POST IE015 with no Authorization header specified in request" - {
       "should return 403 Forbidden" in {
-        val result = controller.nipost()(
-          fakeUnauthorizedEmptyHeaderXmlRequest(
-            routes.DeparturesController.nipost().url))
+        val result = controller.nipost()(fakeUnauthorizedEmptyHeaderXmlRequest(routes.DeparturesController.nipost().url))
         status(result) mustEqual FORBIDDEN
       }
     }
 
     "POST IE015 with no value specified for Authorization header in request" - {
       "should return 403 Forbidden" in {
-        val result = controller.nipost()(
-          fakeUnauthorizedEmptyHeaderValueXmlRequest(
-            routes.DeparturesController.nipost().url))
+        val result = controller.nipost()(fakeUnauthorizedEmptyHeaderValueXmlRequest(routes.DeparturesController.nipost().url))
         status(result) mustEqual FORBIDDEN
       }
     }
 
     "POST IE015 with invalid bearer token" - {
       "should return 403 Forbidden" in {
-        val result = controller.nipost()(
-          fakeUnauthorizedXmlRequest(routes.DeparturesController.nipost().url))
+        val result = controller.nipost()(fakeUnauthorizedXmlRequest(routes.DeparturesController.nipost().url))
         status(result) mustEqual FORBIDDEN
       }
     }
