@@ -24,7 +24,7 @@ import javax.inject.Inject
 
 class PDFRetrievalController @Inject()(cc: ControllerComponents) extends BackendController(cc) {
 
-  def getTransitAccompanyingDocument(departureId: Int): Action[AnyContent] =
+  def getAccompanyingDocument(departureId: Int): Action[AnyContent] =
     Action {
       val path     = Paths.get(getClass.getResource("/files/EmptyTAD.pdf").toURI)
       val blankPdf = Files.readAllBytes(path)

@@ -28,7 +28,7 @@ class PDFRetrievalControllerSpec extends AnyFreeSpec with Matchers {
   "PDFRetrievalController" - {
     "getTransitAccompanyingDocument" - {
       "should return the sample PDF when called" in {
-        val result = controller.getTransitAccompanyingDocument(2)(FakeRequest())
+        val result = controller.getAccompanyingDocument(2)(FakeRequest())
         status(result) mustBe OK
         contentType(result) mustBe Some("application/octet-stream")
       }
