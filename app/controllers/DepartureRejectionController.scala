@@ -82,4 +82,17 @@ class DepartureRejectionController @Inject()(cc: ControllerComponents, jsonUtils
     }
   }
 
+  def getMessages(departureId: Int): Action[AnyContent] = Action {
+    implicit request =>
+      val json =
+        jsonUtils.readJsonFromFile("conf/resources/departure-messages.json")
+
+      Ok(json).as("application/json")
+  }
+
+  def postMessage(departureId: Int): Action[AnyContent] = Action {
+    implicit request =>
+      Accepted
+  }
+
 }

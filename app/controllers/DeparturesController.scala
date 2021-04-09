@@ -76,4 +76,5 @@ class DeparturesController @Inject()(appConfig: AppConfig, cc: ControllerCompone
 
       Ok(json).as("application/json")
   }
+
 }
