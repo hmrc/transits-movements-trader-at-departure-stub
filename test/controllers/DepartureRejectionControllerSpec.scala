@@ -38,6 +38,8 @@ class DepartureRejectionControllerSpec extends AnyFreeSpec with Matchers with Gu
   private val NoReleaseForTransitMessageId: Int        = 2
   private val controlDecisionId: Int                   = 32
   private val controlDecisionMessageId: Int            = 2
+  private val cancellationRequestDepartureId: Int      = 23
+  private val mRNAllocatedMessageId: Int               = 2
 
   "DepartureRejectionControllerSpec" - {
 
@@ -103,6 +105,15 @@ class DepartureRejectionControllerSpec extends AnyFreeSpec with Matchers with Gu
       "must return control decision for transit message summary" in {
 
         val request = FakeRequest(GET, routes.DepartureRejectionController.getSummary(controlDecisionId).url)
+        val result  = route(app, request).value
+
+        status(result) mustEqual OK
+        contentType(result).get mustEqual "application/json"
+      }
+
+      "must return cancellation request for transit message summary" in {
+
+        val request = FakeRequest(GET, routes.DepartureRejectionController.getSummary(cancellationRequestDepartureId).url)
         val result  = route(app, request).value
 
         status(result) mustEqual OK
@@ -181,6 +192,19 @@ class DepartureRejectionControllerSpec extends AnyFreeSpec with Matchers with Gu
           FakeRequest(GET,
                       routes.DepartureRejectionController
                         .getMessage(controlDecisionId, controlDecisionMessageId)
+                        .url)
+        val result = route(app, request).value
+
+        status(result) mustEqual OK
+        contentType(result).get mustEqual "application/json"
+      }
+
+      "must return mrn allocated  message" in {
+
+        val request =
+          FakeRequest(GET,
+                      routes.DepartureRejectionController
+                        .getMessage(cancellationRequestDepartureId, mRNAllocatedMessageId)
                         .url)
         val result = route(app, request).value
 

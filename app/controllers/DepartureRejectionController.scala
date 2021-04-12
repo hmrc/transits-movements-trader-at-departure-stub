@@ -35,6 +35,8 @@ class DepartureRejectionController @Inject()(cc: ControllerComponents, jsonUtils
   private val NoReleaseForTransitMessageId: Int        = 2
   private val ControlDecisionId: Int                   = 32
   private val ControlDecisionMessageId: Int            = 2
+  private val CancellationRequestDepartureId: Int      = 23
+  private val MRNAllocatedMessageId: Int               = 2
 
   def getSummary(departureId: Int): Action[AnyContent] = Action {
     departureId match {
@@ -55,6 +57,9 @@ class DepartureRejectionController @Inject()(cc: ControllerComponents, jsonUtils
         Ok(json).as("application/json")
       case ControlDecisionId =>
         val json = jsonUtils.readJsonFromFile("conf/resources/departure-summary-control-decision.json")
+        Ok(json).as("application/json")
+      case CancellationRequestDepartureId =>
+        val json = jsonUtils.readJsonFromFile("conf/resources/departure-summary-cancellation-request.json")
         Ok(json).as("application/json")
       case _ => BadRequest
     }
@@ -78,16 +83,11 @@ class DepartureRejectionController @Inject()(cc: ControllerComponents, jsonUtils
       case (ControlDecisionId, ControlDecisionMessageId) =>
         Ok(jsonUtils.readJsonFromFile("conf/resources/control-decision.json"))
           .as("application/json")
+      case (CancellationRequestDepartureId, MRNAllocatedMessageId) =>
+        Ok(jsonUtils.readJsonFromFile("conf/resources/mrn-allocated.json"))
+          .as("application/json")
       case _ => BadRequest
     }
-  }
-
-  def getMessages(departureId: Int): Action[AnyContent] = Action {
-    implicit request =>
-      val json =
-        jsonUtils.readJsonFromFile("conf/resources/departure-messages.json")
-
-      Ok(json).as("application/json")
   }
 
   def postMessage(departureId: Int): Action[AnyContent] = Action {
