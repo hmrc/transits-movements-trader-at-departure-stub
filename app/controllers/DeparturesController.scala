@@ -22,7 +22,7 @@ import play.api.Logger
 import play.api.http.HeaderNames
 import play.api.mvc.{Action, AnyContent, ControllerComponents, Request}
 import services.HeaderValidatorService
-import uk.gov.hmrc.play.bootstrap.controller.BackendController
+import uk.gov.hmrc.play.bootstrap.backend.controller.BackendController
 import utils.JsonUtils
 
 import scala.concurrent.Future

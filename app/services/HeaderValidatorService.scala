@@ -18,7 +18,6 @@ package services
 
 import com.google.inject.ImplementedBy
 import com.google.inject.Singleton
-import play.api.Logger
 import play.api.mvc.Headers
 
 @Singleton

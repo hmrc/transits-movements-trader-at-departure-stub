@@ -17,7 +17,7 @@
 package controllers
 
 import play.api.mvc.{Action, AnyContent, ControllerComponents}
-import uk.gov.hmrc.play.bootstrap.controller.BackendController
+import uk.gov.hmrc.play.bootstrap.backend.controller.BackendController
 
 import java.nio.file.{Files, Paths}
 import javax.inject.Inject
