@@ -19,25 +19,31 @@ package services
 import com.google.inject.ImplementedBy
 import com.google.inject.Singleton
 import play.api.mvc.Headers
+import play.api.Logging
 
 @Singleton
-class HeaderValidatorServiceImpl extends HeaderValidatorService {
+class HeaderValidatorServiceImpl extends HeaderValidatorService with Logging {
 
   def validate(headers: Headers): Boolean = {
 
-    val customProcessHost = headers.get("CustomProcessHost").isDefined
+    logger.debug(headers.headers.toString())
 
-    val xCorrelationId = headers.get("X-Correlation-ID").isDefined
+    val customProcessHost = headers.hasHeader("CustomProcessHost")
 
-    val date = headers.get("Date").isDefined
+    val xCorrelationId = headers.hasHeader("X-Correlation-ID")
 
-    val contentType = headers.get("Content-Type").isDefined
+    val date = headers.hasHeader("Date")
 
-    val accept = headers.get("Accept").isDefined
+    val contentType = headers.hasHeader("Content-Type")
 
-    val messageType = headers.get("X-Message-Type").isDefined
+    val accept = headers.get("Accept") match {
+      case Some(h) => h.startsWith("application/xml")
+      case None    => false
+    }
 
-    val messageSender = headers.get("X-Message-Sender").isDefined
+    val messageType = headers.hasHeader("X-Message-Type")
+
+    val messageSender = headers.hasHeader("X-Message-Sender")
 
     customProcessHost && xCorrelationId && date && contentType && accept && messageType && messageSender
   }
