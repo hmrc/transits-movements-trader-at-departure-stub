@@ -16,17 +16,15 @@
 
 package config
 
-import play.api.{ConfigLoader, Configuration}
-
-import scala.language.implicitConversions
+import io.lemonlabs.uri.AbsoluteUrl
+import io.lemonlabs.uri.UrlPath
+import play.api.ConfigLoader
+import play.api.Configuration
 
 final case class Service(host: String, port: String, protocol: String, startUrl: String) {
 
-  def baseUrl: String =
-    s"$protocol://$host:$port/$startUrl"
-
-  override def toString: String =
-    baseUrl
+  def baseUrl: AbsoluteUrl =
+    AbsoluteUrl.parse(s"$protocol://$host:$port").withPath(UrlPath.parse(startUrl))
 }
 
 object Service {
@@ -41,7 +39,4 @@ object Service {
 
       Service(host, port, protocol, startUrl)
   }
-
-  implicit def convertToString(service: Service): String =
-    service.baseUrl
 }

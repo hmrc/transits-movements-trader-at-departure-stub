@@ -16,18 +16,17 @@
 
 package config
 
-import javax.inject.{Inject, Singleton}
+import io.lemonlabs.uri.AbsoluteUrl
 import play.api.Configuration
-import uk.gov.hmrc.play.bootstrap.config.ServicesConfig
+
+import javax.inject.Inject
+import javax.inject.Singleton
 
 @Singleton
-class AppConfig @Inject()(config: Configuration, servicesConfig: ServicesConfig) {
+class AppConfig @Inject()(config: Configuration) {
 
-  val authBaseUrl: String = servicesConfig.baseUrl("auth")
-  lazy val routerUrl: String =
-    config.get[Service]("microservice.services.router").baseUrl
-
-  val auditingEnabled: Boolean = config.get[Boolean]("auditing.enabled")
+  lazy val guaranteeTestSupportUrl: AbsoluteUrl =
+    config.get[Service]("microservice.services.guarantee-test-support").baseUrl
 
   val graphiteHost: String =
     config.get[String]("microservice.metrics.graphite.host")

@@ -17,35 +17,47 @@
 package controllers
 
 import akka.actor.ActorSystem
-import akka.stream.{ActorMaterializer, Materializer}
+import akka.stream.Materializer
 import config.AppConfig
 import org.scalatest.OptionValues
 import org.scalatest.freespec.AnyFreeSpec
 import org.scalatest.matchers.must.Matchers
 import org.scalatestplus.play.guice.GuiceOneAppPerSuite
+import play.api.Configuration
+import play.api.Environment
 import play.api.http.HeaderNames
+import play.api.mvc.Headers
+import play.api.test.FakeHeaders
+import play.api.test.FakeRequest
+import play.api.test.Helpers
 import play.api.test.Helpers._
-import play.api.test.{FakeHeaders, FakeRequest, Helpers}
-import play.api.{Configuration, Environment}
+import services.FakeSimulatedResponseService
 import services.HeaderValidatorServiceImpl
-import uk.gov.hmrc.play.bootstrap.config.ServicesConfig
+import uk.gov.hmrc.http.HttpResponse
 import utils.JsonUtils
 
-class DeparturesControllerSpec extends AnyFreeSpec with Matchers with GuiceOneAppPerSuite with OptionValues {
+import java.time.OffsetDateTime
+import java.time.ZoneOffset
+import java.time.format.DateTimeFormatter
+import java.util.UUID
+import scala.concurrent.ExecutionContext.Implicits.global
+import scala.util.Random
+import scala.xml.Elem
 
-  implicit val system: ActorSystem = ActorSystem("DeparturesControllerSpec")
+class StubControllerSpec extends AnyFreeSpec with Matchers with GuiceOneAppPerSuite with OptionValues {
 
-  implicit def mat: Materializer = ActorMaterializer()
+  implicit val system       = ActorSystem(suiteName)
+  implicit val materializer = Materializer(system)
 
   private val env           = Environment.simple()
   private val configuration = Configuration.load(env)
 
-  private val serviceConfig   = new ServicesConfig(configuration)
-  private val appConfig       = new AppConfig(configuration, serviceConfig)
+  private val appConfig       = new AppConfig(configuration)
   private val jsonUtils       = new JsonUtils(env)
   private val headerValidator = new HeaderValidatorServiceImpl()
 
-  private val controller = new DeparturesController(appConfig, Helpers.stubControllerComponents(), headerValidator, jsonUtils)
+  private def controller(response: Option[HttpResponse] = None) =
+    new StubController(appConfig, Helpers.stubControllerComponents(), headerValidator, FakeSimulatedResponseService(response), jsonUtils)
 
   val CC015B = <CC015B>
     <SynIdeMES1>UNOC</SynIdeMES1>
@@ -167,13 +179,48 @@ class DeparturesControllerSpec extends AnyFreeSpec with Matchers with GuiceOneAp
     </GOOITEGDS>
   </CC015B>
 
-  val validHeaders: Seq[(String, String)] = Seq(
+  val CD034A =
+    <CD034A>
+      <SynIdeMES1>UNOC</SynIdeMES1>
+      <SynVerNumMES2>3</SynVerNumMES2>
+      <MesSenMES3>MDTP-GUA-{UUID.randomUUID().toString.replaceAll("-", "").take(24)}</MesSenMES3>
+      <MesRecMES6>NTA.GB</MesRecMES6>
+      <DatOfPreMES9>{DateTimeFormatter.ofPattern("yyyyMMdd").format(OffsetDateTime.now(ZoneOffset.UTC))}</DatOfPreMES9>
+      <TimOfPreMES10>{DateTimeFormatter.ofPattern("HHmm").format(OffsetDateTime.now(ZoneOffset.UTC))}</TimOfPreMES10>
+      <IntConRefMES11>{Random.alphanumeric.take(14).mkString}</IntConRefMES11>
+      <MesIdeMES19>{Random.alphanumeric.take(14).mkString}</MesIdeMES19>
+      <MesTypMES20>GB034A</MesTypMES20>
+      <TRAPRIRC1>
+        <TINRC159>GB12345678900</TINRC159>
+      </TRAPRIRC1>
+      <GUAREF2>
+        <GuaRefNumGRNREF21>05DE3300BE0001067A001017</GuaRefNumGRNREF21>
+        <GUAQUE>
+          <QueIdeQUE1>2</QueIdeQUE1>
+        </GUAQUE>
+        <ACCDOC728>
+          <AccCodCOD729>ABC1</AccCodCOD729>
+        </ACCDOC728>
+      </GUAREF2>
+    </CD034A>
+
+  val validDepartureHeaders: Seq[(String, String)] = Seq(
     "CustomProcessHost" -> "Digital",
     "X-Correlation-ID"  -> "137302f5-71ae-40a4-bd92-cac2ae7sde2f",
     "Date"              -> "Tue, 29 Sep 2020 11:46:50 +0100",
     "Content-Type"      -> "application/xml",
     "Accept"            -> "application/xml",
     "X-Message-Type"    -> "IE015",
+    "X-Message-Sender"  -> "MDTP-000000000000000000000000011-01"
+  )
+
+  val validGuaranteeHeaders: Seq[(String, String)] = Seq(
+    "CustomProcessHost" -> "Digital",
+    "X-Correlation-ID"  -> "137302f5-71ae-40a4-bd92-cac2ae7sde2f",
+    "Date"              -> "Tue, 29 Sep 2020 11:46:50 +0100",
+    "Content-Type"      -> "application/xml",
+    "Accept"            -> "application/xml",
+    "X-Message-Type"    -> "IE034",
     "X-Message-Sender"  -> "MDTP-000000000000000000000000011-01"
   )
 
@@ -185,54 +232,80 @@ class DeparturesControllerSpec extends AnyFreeSpec with Matchers with GuiceOneAp
     "Accept"            -> "application/xml"
   )
 
-  private def fakeValidXmlRequest(route: String, bearerToken: String) =
-    FakeRequest(method = "POST", uri = route, headers = FakeHeaders(validHeaders ++ Seq(HeaderNames.AUTHORIZATION -> s"Bearer $bearerToken")), body = CC015B)
+  private def fakeValidXmlRequest(route: String, headers: Headers, body: Elem) =
+    FakeRequest(method = "POST", uri = route, headers, body)
+
+  private def fakeValidDepartureXmlRequest(route: String, bearerToken: String) =
+    fakeValidXmlRequest(route, headers = FakeHeaders(validDepartureHeaders ++ Seq(HeaderNames.AUTHORIZATION -> s"Bearer $bearerToken")), body = CC015B)
+
+  private def fakeValidGuaranteeXmlRequest(route: String, bearerToken: String) =
+    fakeValidXmlRequest(route, headers = FakeHeaders(validGuaranteeHeaders ++ Seq(HeaderNames.AUTHORIZATION -> s"Bearer $bearerToken")), body = CD034A)
 
   private def fakeInvalidXmlRequest(route: String, bearerToken: String) =
     FakeRequest(method = "POST", uri = route, headers = FakeHeaders(invalidHeaders ++ Seq(HeaderNames.AUTHORIZATION -> s"Bearer $bearerToken")), body = CC015B)
 
   private def fakeUnauthorizedEmptyHeaderXmlRequest(route: String) =
-    FakeRequest(method = "POST", uri = route, headers = FakeHeaders(validHeaders), body = CC015B)
+    FakeRequest(method = "POST", uri = route, headers = FakeHeaders(validDepartureHeaders), body = CC015B)
 
   private def fakeUnauthorizedEmptyHeaderValueXmlRequest(route: String) =
-    FakeRequest(method = "POST", uri = route, headers = FakeHeaders(validHeaders ++ Seq(HeaderNames.AUTHORIZATION -> s"")), body = CC015B)
+    FakeRequest(method = "POST", uri = route, headers = FakeHeaders(validDepartureHeaders ++ Seq(HeaderNames.AUTHORIZATION -> s"")), body = CC015B)
 
   private def fakeUnauthorizedXmlRequest(route: String) =
-    FakeRequest(method = "POST", uri = route, headers = FakeHeaders(validHeaders ++ Seq(HeaderNames.AUTHORIZATION -> s"Bearer 123")), body = CC015B)
+    FakeRequest(method = "POST", uri = route, headers = FakeHeaders(validDepartureHeaders ++ Seq(HeaderNames.AUTHORIZATION -> s"Bearer 123")), body = CC015B)
 
   "gbpost" - {
     "POST IE015 with valid headers and valid bearer token" - {
       "should return 202 Accepted" in {
-        val result = controller.gbpost()(fakeValidXmlRequest(routes.DeparturesController.gbpost().url, appConfig.eisgbBearerToken))
+        val result = controller().gbpost(fakeValidDepartureXmlRequest(routes.StubController.gbpost.url, appConfig.eisgbBearerToken))
         status(result) mustEqual ACCEPTED
       }
     }
 
     "POST IE015 with invalid headers and valid bearer token" - {
       "should return 400 BadRequest" in {
-        val result = controller.gbpost()(fakeInvalidXmlRequest(routes.DeparturesController.gbpost().url, appConfig.eisgbBearerToken))
+        val result = controller().gbpost(fakeInvalidXmlRequest(routes.StubController.gbpost.url, appConfig.eisgbBearerToken))
         status(result) mustEqual BAD_REQUEST
       }
     }
 
     "POST IE015 with no Authorization header specified in request" - {
       "should return 403 Forbidden" in {
-        val result = controller.gbpost()(fakeUnauthorizedEmptyHeaderXmlRequest(routes.DeparturesController.gbpost().url))
+        val result = controller().gbpost(fakeUnauthorizedEmptyHeaderXmlRequest(routes.StubController.gbpost.url))
         status(result) mustEqual FORBIDDEN
       }
     }
 
     "POST IE015 with no value specified for Authorization header in request" - {
       "should return 403 Forbidden" in {
-        val result = controller.gbpost()(fakeUnauthorizedEmptyHeaderValueXmlRequest(routes.DeparturesController.gbpost().url))
+        val result = controller().gbpost(fakeUnauthorizedEmptyHeaderValueXmlRequest(routes.StubController.gbpost.url))
         status(result) mustEqual FORBIDDEN
       }
     }
 
     "POST IE015 with invalid bearer token" - {
       "should return 403 Forbidden" in {
-        val result = controller.gbpost()(fakeUnauthorizedXmlRequest(routes.DeparturesController.gbpost().url))
+        val result = controller().gbpost(fakeUnauthorizedXmlRequest(routes.StubController.gbpost.url))
         status(result) mustEqual FORBIDDEN
+      }
+    }
+
+    "POST IE034 when a simulated response is returned" - {
+      "should pass through success status from the response" in {
+        val result =
+          controller(response = Some(HttpResponse(OK, ""))).gbpost(fakeValidGuaranteeXmlRequest(routes.StubController.gbpost.url, appConfig.eisgbBearerToken))
+        status(result) mustEqual OK
+      }
+
+      "should pass through client error status from the response" in {
+        val result = controller(response = Some(HttpResponse(FORBIDDEN, "Argh!!!")))
+          .gbpost(fakeValidGuaranteeXmlRequest(routes.StubController.gbpost.url, appConfig.eisgbBearerToken))
+        status(result) mustEqual FORBIDDEN
+      }
+
+      "should pass through server error status from the response" in {
+        val result = controller(response = Some(HttpResponse(GATEWAY_TIMEOUT, "Kaboom!!!")))
+          .gbpost(fakeValidGuaranteeXmlRequest(routes.StubController.gbpost.url, appConfig.eisgbBearerToken))
+        status(result) mustEqual GATEWAY_TIMEOUT
       }
     }
   }
@@ -240,36 +313,56 @@ class DeparturesControllerSpec extends AnyFreeSpec with Matchers with GuiceOneAp
   "nipost" - {
     "POST IE015 with valid headers and valid bearer token" - {
       "should return 202 Accepted" in {
-        val result = controller.nipost()(fakeValidXmlRequest(routes.DeparturesController.nipost().url, appConfig.eisniBearerToken))
+        val result = controller().nipost(fakeValidDepartureXmlRequest(routes.StubController.nipost.url, appConfig.eisniBearerToken))
         status(result) mustEqual ACCEPTED
       }
     }
 
     "POST IE015 with invalid headers and valid bearer token" - {
       "should return 400 BadRequest" in {
-        val result = controller.nipost()(fakeInvalidXmlRequest(routes.DeparturesController.nipost().url, appConfig.eisniBearerToken))
+        val result = controller().nipost(fakeInvalidXmlRequest(routes.StubController.nipost.url, appConfig.eisniBearerToken))
         status(result) mustEqual BAD_REQUEST
       }
     }
 
     "POST IE015 with no Authorization header specified in request" - {
       "should return 403 Forbidden" in {
-        val result = controller.nipost()(fakeUnauthorizedEmptyHeaderXmlRequest(routes.DeparturesController.nipost().url))
+        val result = controller().nipost(fakeUnauthorizedEmptyHeaderXmlRequest(routes.StubController.nipost.url))
         status(result) mustEqual FORBIDDEN
       }
     }
 
     "POST IE015 with no value specified for Authorization header in request" - {
       "should return 403 Forbidden" in {
-        val result = controller.nipost()(fakeUnauthorizedEmptyHeaderValueXmlRequest(routes.DeparturesController.nipost().url))
+        val result = controller().nipost(fakeUnauthorizedEmptyHeaderValueXmlRequest(routes.StubController.nipost.url))
         status(result) mustEqual FORBIDDEN
       }
     }
 
     "POST IE015 with invalid bearer token" - {
       "should return 403 Forbidden" in {
-        val result = controller.nipost()(fakeUnauthorizedXmlRequest(routes.DeparturesController.nipost().url))
+        val result = controller().nipost(fakeUnauthorizedXmlRequest(routes.StubController.nipost.url))
         status(result) mustEqual FORBIDDEN
+      }
+    }
+
+    "POST IE034 when a simulated response is returned" - {
+      "should pass through success status from the response" in {
+        val result =
+          controller(response = Some(HttpResponse(OK, ""))).nipost(fakeValidGuaranteeXmlRequest(routes.StubController.nipost.url, appConfig.eisniBearerToken))
+        status(result) mustEqual OK
+      }
+
+      "should pass through client error status from the response" in {
+        val result = controller(response = Some(HttpResponse(FORBIDDEN, "Argh!!!")))
+          .nipost(fakeValidGuaranteeXmlRequest(routes.StubController.nipost.url, appConfig.eisniBearerToken))
+        status(result) mustEqual FORBIDDEN
+      }
+
+      "should pass through server error status from the response" in {
+        val result = controller(response = Some(HttpResponse(GATEWAY_TIMEOUT, "Kaboom!!!")))
+          .nipost(fakeValidGuaranteeXmlRequest(routes.StubController.nipost.url, appConfig.eisniBearerToken))
+        status(result) mustEqual GATEWAY_TIMEOUT
       }
     }
   }

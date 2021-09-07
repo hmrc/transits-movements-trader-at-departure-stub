@@ -1,0 +1,95 @@
+/*
+ * Copyright 2021 HM Revenue & Customs
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+package services
+
+import cats.data.NonEmptyList
+import connectors.GuaranteeTestSupportConnector
+import models.BalanceRequestFunctionalError
+import models.BalanceRequestResponse
+import models.BalanceRequestSuccess
+import models.BalanceRequestXmlError
+import models.SimulatedGuaranteeResponse
+import models.errors.FunctionalError
+import models.errors.XmlError
+import models.values.CurrencyCode
+import models.values.ErrorType
+import models.values.GuaranteeReference
+import models.values.MessageSender
+import models.values.TaxIdentifier
+import models.values.UniqueReference
+import uk.gov.hmrc.http.HeaderCarrier
+import uk.gov.hmrc.http.HttpResponse
+
+import javax.inject.Inject
+import scala.concurrent.ExecutionContext
+import scala.concurrent.Future
+import scala.math.BigDecimal.RoundingMode
+import scala.util.Random
+import scala.xml.NodeSeq
+
+class GuaranteeResponseService @Inject()(connector: GuaranteeTestSupportConnector)(implicit ec: ExecutionContext) {
+  private val FunctionalNack = "906"
+  private val XmlNack        = "917"
+
+  // The schema mandates 16 chars maximum including the decimal point
+  private val Decimal16 = 9999999999999.99
+
+  /* For the purposes of this stub we will use the access code provided by the caller
+   * to decide which simulated response to trigger
+   */
+  private def responseFromCode(responseCode: String): BalanceRequestResponse = responseCode match {
+    case FunctionalNack =>
+      val error = FunctionalError(ErrorType(12), "Foo.Bar(1).Baz", None)
+      BalanceRequestFunctionalError(NonEmptyList.one(error))
+    case XmlNack =>
+      val error = XmlError(ErrorType(14), "Foo.Bar(1).Baz", None)
+      BalanceRequestXmlError(NonEmptyList.one(error))
+    case _ =>
+      val randomBalance = Random.nextDouble().abs * Decimal16
+      val balance       = BigDecimal(randomBalance).setScale(2, RoundingMode.HALF_EVEN)
+      val currency      = CurrencyCode("EUR")
+      BalanceRequestSuccess(balance, currency)
+  }
+
+  def buildSimulatedResponseFor(message: NodeSeq): Option[SimulatedGuaranteeResponse] =
+    for {
+      taxIdNode <- (message \\ "TINRC159").headOption
+      taxIdentifier = taxIdNode.text
+      guaranteeRefNode <- (message \\ "GuaRefNumGRNREF21").headOption
+      guaranteeReference = guaranteeRefNode.text
+      origRefNode <- (message \\ "MesIdeMES19").headOption
+      origMessageReference = origRefNode.text
+      accessCodeNode <- (message \\ "AccCodCOD729").headOption
+      accessCode = accessCodeNode.text
+    } yield
+      SimulatedGuaranteeResponse(
+        TaxIdentifier(taxIdentifier),
+        GuaranteeReference(guaranteeReference),
+        UniqueReference(origMessageReference),
+        responseFromCode(accessCode.takeRight(3))
+      )
+
+  def simulateResponseTo(messageSender: MessageSender, message: NodeSeq)(implicit hc: HeaderCarrier): Future[Option[HttpResponse]] =
+    buildSimulatedResponseFor(message)
+      .map {
+        response =>
+          connector.simulateResponse(messageSender, response).map(Some.apply)
+      }
+      .getOrElse {
+        Future.successful(None)
+      }
+}

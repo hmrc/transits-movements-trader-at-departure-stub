@@ -20,15 +20,24 @@ import com.google.inject.Inject
 import config.AppConfig
 import play.api.Logger
 import play.api.http.HeaderNames
-import play.api.mvc.{Action, AnyContent, ControllerComponents, Request}
+import play.api.mvc.Action
+import play.api.mvc.AnyContent
+import play.api.mvc.ControllerComponents
+import play.api.mvc.Request
 import services.HeaderValidatorService
+import services.SimulatedResponseService
 import uk.gov.hmrc.play.bootstrap.backend.controller.BackendController
 import utils.JsonUtils
 
+import scala.concurrent.ExecutionContext
 import scala.concurrent.Future
 import scala.xml.NodeSeq
 
-class DeparturesController @Inject()(appConfig: AppConfig, cc: ControllerComponents, headerValidatorService: HeaderValidatorService, jsonUtils: JsonUtils)
+class StubController @Inject()(appConfig: AppConfig,
+                               cc: ControllerComponents,
+                               headerValidatorService: HeaderValidatorService,
+                               responseService: SimulatedResponseService,
+                               jsonUtils: JsonUtils)(implicit ec: ExecutionContext)
     extends BackendController(cc) {
 
   val logger = Logger(this.getClass)
@@ -48,7 +57,12 @@ class DeparturesController @Inject()(appConfig: AppConfig, cc: ControllerCompone
             if (value == s"Bearer $bearerToken") {
               if (headerValidatorService.validate(request.headers)) {
                 logger.warn(s"validated XML ${request.body.toString()}")
-                Future.successful(Accepted)
+                responseService.simulateResponseTo(request.body).map {
+                  case Some(response) =>
+                    Status(response.status)(response.body)
+                  case None =>
+                    Accepted
+                }
               } else {
                 logger.warn("FAILED VALIDATING headers")
                 Future.successful(BadRequest)
