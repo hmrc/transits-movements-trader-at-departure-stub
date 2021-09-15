@@ -91,7 +91,7 @@ class DepartureRejectionController @Inject()(cc: ControllerComponents, jsonUtils
   }
 
   def postMessage(departureId: Int): Action[AnyContent] = Action {
-    implicit request =>
+    _ =>
       Accepted
   }
 

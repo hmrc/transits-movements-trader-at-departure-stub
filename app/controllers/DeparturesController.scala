@@ -18,7 +18,7 @@ package controllers
 
 import com.google.inject.Inject
 import config.AppConfig
-import play.api.Logger
+import play.api.Logging
 import play.api.http.HeaderNames
 import play.api.mvc.{Action, AnyContent, ControllerComponents, Request}
 import services.HeaderValidatorService
@@ -29,9 +29,8 @@ import scala.concurrent.Future
 import scala.xml.NodeSeq
 
 class DeparturesController @Inject()(appConfig: AppConfig, cc: ControllerComponents, headerValidatorService: HeaderValidatorService, jsonUtils: JsonUtils)
-    extends BackendController(cc) {
-
-  val logger = Logger(this.getClass)
+    extends BackendController(cc)
+    with Logging {
 
   def gbpost: Action[NodeSeq] =
     internal_post("gb endpoint called", appConfig.eisgbBearerToken)
@@ -62,7 +61,7 @@ class DeparturesController @Inject()(appConfig: AppConfig, cc: ControllerCompone
     }
 
   def get: Action[AnyContent] = Action {
-    implicit request =>
+    _ =>
       val json =
         jsonUtils.readJsonFromFile("conf/resources/departure-response.json")
 
@@ -70,7 +69,7 @@ class DeparturesController @Inject()(appConfig: AppConfig, cc: ControllerCompone
   }
 
   def getDeparture(departureId: Int): Action[AnyContent] = Action {
-    implicit request =>
+    _ =>
       val json =
         jsonUtils.readJsonFromFile("conf/resources/single-departure-response.json")
 
