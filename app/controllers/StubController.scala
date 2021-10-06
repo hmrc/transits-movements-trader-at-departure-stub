@@ -38,9 +38,8 @@ class StubController @Inject()(appConfig: AppConfig,
                                headerValidatorService: HeaderValidatorService,
                                responseService: SimulatedResponseService,
                                jsonUtils: JsonUtils)(implicit ec: ExecutionContext)
-    extends BackendController(cc) with Logging {
-
-  val logger = Logger(this.getClass)
+    extends BackendController(cc)
+    with Logging {
 
   def gbpost: Action[NodeSeq] =
     internal_post("gb endpoint called", appConfig.eisgbBearerToken)
