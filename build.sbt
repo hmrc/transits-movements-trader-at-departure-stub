@@ -22,6 +22,6 @@ lazy val scalacSettings = Def.settings(
   // Disable fatal warnings and warnings from discarding values
   scalacOptions ~= {
     opts =>
-      opts.filterNot(Set("-Xfatal-warnings", "-Ywarn-value-discard"))
+      opts.filterNot(Set("-Xfatal-warnings", "-Ywarn-value-discard", "-Ywarn-unused:params"))
   }
 )
