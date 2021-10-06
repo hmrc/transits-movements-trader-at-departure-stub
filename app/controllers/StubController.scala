@@ -18,7 +18,7 @@ package controllers
 
 import com.google.inject.Inject
 import config.AppConfig
-import play.api.Logger
+import play.api.Logging
 import play.api.http.HeaderNames
 import play.api.mvc.Action
 import play.api.mvc.AnyContent
@@ -38,7 +38,7 @@ class StubController @Inject()(appConfig: AppConfig,
                                headerValidatorService: HeaderValidatorService,
                                responseService: SimulatedResponseService,
                                jsonUtils: JsonUtils)(implicit ec: ExecutionContext)
-    extends BackendController(cc) {
+    extends BackendController(cc) with Logging {
 
   val logger = Logger(this.getClass)
 
@@ -76,7 +76,7 @@ class StubController @Inject()(appConfig: AppConfig,
     }
 
   def get: Action[AnyContent] = Action {
-    implicit request =>
+    _ =>
       val json =
         jsonUtils.readJsonFromFile("conf/resources/departure-response.json")
 
@@ -84,7 +84,7 @@ class StubController @Inject()(appConfig: AppConfig,
   }
 
   def getDeparture(departureId: Int): Action[AnyContent] = Action {
-    implicit request =>
+    _ =>
       val json =
         jsonUtils.readJsonFromFile("conf/resources/single-departure-response.json")
 

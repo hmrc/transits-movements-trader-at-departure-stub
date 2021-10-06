@@ -1,4 +1,7 @@
 {
+  "retrievedDepartures": 14,
+  "totalDepartures": 14,
+  "totalMatched": 14,
   "departures": [{
     "departureId": 22,
     "eoriNumber": "GB12345",
