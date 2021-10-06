@@ -44,6 +44,7 @@ import scala.xml.NodeSeq
 class GuaranteeResponseService @Inject()(connector: GuaranteeTestSupportConnector)(implicit ec: ExecutionContext) {
   private val FunctionalNack = "906"
   private val XmlNack        = "917"
+  private val Timeout        = "000"
 
   // The schema mandates 16 chars maximum including the decimal point
   private val Decimal16 = 9999999999999.99
@@ -51,18 +52,20 @@ class GuaranteeResponseService @Inject()(connector: GuaranteeTestSupportConnecto
   /* For the purposes of this stub we will use the access code provided by the caller
    * to decide which simulated response to trigger
    */
-  private def responseFromCode(responseCode: String): BalanceRequestResponse = responseCode match {
+  private def responseFromCode(responseCode: String): Option[BalanceRequestResponse] = responseCode match {
     case FunctionalNack =>
       val error = FunctionalError(ErrorType(12), "Foo.Bar(1).Baz", None)
-      BalanceRequestFunctionalError(NonEmptyList.one(error))
+      Some(BalanceRequestFunctionalError(NonEmptyList.one(error)))
     case XmlNack =>
       val error = XmlError(ErrorType(14), "Foo.Bar(1).Baz", None)
-      BalanceRequestXmlError(NonEmptyList.one(error))
+      Some(BalanceRequestXmlError(NonEmptyList.one(error)))
+    case Timeout =>
+      None
     case _ =>
       val randomBalance = Random.nextDouble().abs * Decimal16
       val balance       = BigDecimal(randomBalance).setScale(2, RoundingMode.HALF_EVEN)
       val currency      = CurrencyCode("EUR")
-      BalanceRequestSuccess(balance, currency)
+      Some(BalanceRequestSuccess(balance, currency))
   }
 
   def buildSimulatedResponseFor(message: NodeSeq): Option[SimulatedGuaranteeResponse] =
@@ -74,13 +77,15 @@ class GuaranteeResponseService @Inject()(connector: GuaranteeTestSupportConnecto
       origRefNode <- (message \\ "MesIdeMES19").headOption
       origMessageReference = origRefNode.text
       accessCodeNode <- (message \\ "AccCodCOD729").headOption
-      accessCode = accessCodeNode.text
+      accessCode       = accessCodeNode.text
+      accessCodeSuffix = accessCode.takeRight(3)
+      response <- responseFromCode(accessCodeSuffix)
     } yield
       SimulatedGuaranteeResponse(
         TaxIdentifier(taxIdentifier),
         GuaranteeReference(guaranteeReference),
         UniqueReference(origMessageReference),
-        responseFromCode(accessCode.takeRight(3))
+        response
       )
 
   def simulateResponseTo(messageSender: MessageSender, message: NodeSeq)(implicit hc: HeaderCarrier): Future[Option[HttpResponse]] =

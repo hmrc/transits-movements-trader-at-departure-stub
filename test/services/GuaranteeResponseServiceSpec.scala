@@ -111,6 +111,13 @@ class GuaranteeResponseServiceSpec extends AnyFreeSpec with Matchers with Option
       }
     }
 
+    "when given access code ending with 000" - {
+      "should not trigger any response" in {
+        val simulatedResponse = service().buildSimulatedResponseFor(CD034A("T000"))
+        simulatedResponse mustBe None
+      }
+    }
+
     "when given anything else" - {
       "should trigger success response" in forAll(accessCodeGen) {
         accessCode =>
