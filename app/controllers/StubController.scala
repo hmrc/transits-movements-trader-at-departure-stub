@@ -33,12 +33,11 @@ import scala.concurrent.ExecutionContext
 import scala.concurrent.Future
 import scala.xml.NodeSeq
 
-class StubController @Inject() (appConfig: AppConfig,
-                                cc: ControllerComponents,
-                                headerValidatorService: HeaderValidatorService,
-                                responseService: SimulatedResponseService,
-                                jsonUtils: JsonUtils
-)(implicit ec: ExecutionContext)
+class StubController @Inject()(appConfig: AppConfig,
+                               cc: ControllerComponents,
+                               headerValidatorService: HeaderValidatorService,
+                               responseService: SimulatedResponseService,
+                               jsonUtils: JsonUtils)(implicit ec: ExecutionContext)
     extends BackendController(cc)
     with Logging {
 
