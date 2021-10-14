@@ -33,13 +33,16 @@ import scala.concurrent.ExecutionContext
 import scala.concurrent.Future
 import scala.xml.NodeSeq
 
-class StubController @Inject()(appConfig: AppConfig,
-                               cc: ControllerComponents,
-                               headerValidatorService: HeaderValidatorService,
-                               responseService: SimulatedResponseService,
-                               jsonUtils: JsonUtils)(implicit ec: ExecutionContext)
+class StubController @Inject() (appConfig: AppConfig,
+                                cc: ControllerComponents,
+                                headerValidatorService: HeaderValidatorService,
+                                responseService: SimulatedResponseService,
+                                jsonUtils: JsonUtils
+)(implicit ec: ExecutionContext)
     extends BackendController(cc)
     with Logging {
+
+  val OneHundredKilobytes = 100000
 
   def gbpost: Action[NodeSeq] =
     internal_post("gb endpoint called", appConfig.eisgbBearerToken)
@@ -55,7 +58,14 @@ class StubController @Inject()(appConfig: AppConfig,
           case Some(value) =>
             if (value == s"Bearer $bearerToken") {
               if (headerValidatorService.validate(request.headers)) {
-                logger.warn(s"validated XML ${request.body.toString()}")
+                val bodySize = request.headers.get(HeaderNames.CONTENT_LENGTH).map(_.toInt)
+
+                if (bodySize.exists(_ < OneHundredKilobytes)) {
+                  logger.warn(s"validated XML ${request.body.toString()}")
+                } else {
+                  logger.warn("validated XML")
+                }
+
                 responseService.simulateResponseTo(request.body).map {
                   case Some(response) =>
                     Status(response.status)(response.body)
