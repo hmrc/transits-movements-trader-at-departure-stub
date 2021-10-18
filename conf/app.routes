@@ -1,9 +1,9 @@
 # microservice specific routes
 
-POST   /movements/departures/gb                                             controllers.DeparturesController.gbpost
-POST   /movements/departures/ni                                             controllers.DeparturesController.nipost
-GET    /movements/departures                                                controllers.DeparturesController.get
-GET    /movements/departures/:departureId                                   controllers.DeparturesController.getDeparture(departureId: Int)
+POST   /movements/departures/gb                                             controllers.StubController.gbpost
+POST   /movements/departures/ni                                             controllers.StubController.nipost
+GET    /movements/departures                                                controllers.StubController.get
+GET    /movements/departures/:departureId                                   controllers.StubController.getDeparture(departureId: Int)
 
 GET    /movements/departures/:departureId/messages/summary                  controllers.DepartureRejectionController.getSummary(departureId: Int)
 GET    /movements/departures/:departureId/messages/:messageId               controllers.DepartureRejectionController.getMessage(departureId: Int, messageId: Int)

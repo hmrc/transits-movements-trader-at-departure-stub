@@ -20,17 +20,28 @@ import com.google.inject.Inject
 import config.AppConfig
 import play.api.Logging
 import play.api.http.HeaderNames
-import play.api.mvc.{Action, AnyContent, ControllerComponents, Request}
+import play.api.mvc.Action
+import play.api.mvc.AnyContent
+import play.api.mvc.ControllerComponents
+import play.api.mvc.Request
 import services.HeaderValidatorService
+import services.SimulatedResponseService
 import uk.gov.hmrc.play.bootstrap.backend.controller.BackendController
 import utils.JsonUtils
 
+import scala.concurrent.ExecutionContext
 import scala.concurrent.Future
 import scala.xml.NodeSeq
 
-class DeparturesController @Inject()(appConfig: AppConfig, cc: ControllerComponents, headerValidatorService: HeaderValidatorService, jsonUtils: JsonUtils)
+class StubController @Inject()(appConfig: AppConfig,
+                               cc: ControllerComponents,
+                               headerValidatorService: HeaderValidatorService,
+                               responseService: SimulatedResponseService,
+                               jsonUtils: JsonUtils)(implicit ec: ExecutionContext)
     extends BackendController(cc)
     with Logging {
+
+  val OneHundredKilobytes = 100000
 
   def gbpost: Action[NodeSeq] =
     internal_post("gb endpoint called", appConfig.eisgbBearerToken)
@@ -46,8 +57,20 @@ class DeparturesController @Inject()(appConfig: AppConfig, cc: ControllerCompone
           case Some(value) =>
             if (value == s"Bearer $bearerToken") {
               if (headerValidatorService.validate(request.headers)) {
-                logger.warn(s"validated XML ${request.body.toString()}")
-                Future.successful(Accepted)
+                val bodySize = request.headers.get(HeaderNames.CONTENT_LENGTH).map(_.toInt)
+
+                if (bodySize.exists(_ < OneHundredKilobytes)) {
+                  logger.warn(s"validated XML ${request.body.toString()}")
+                } else {
+                  logger.warn("validated XML")
+                }
+
+                responseService.simulateResponseTo(request.body).map {
+                  case Some(response) =>
+                    Status(response.status)(response.body)
+                  case None =>
+                    Accepted
+                }
               } else {
                 logger.warn("FAILED VALIDATING headers")
                 Future.successful(BadRequest)

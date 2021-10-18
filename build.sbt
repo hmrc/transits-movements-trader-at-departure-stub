@@ -1,25 +1,27 @@
-import uk.gov.hmrc.SbtArtifactory
-import uk.gov.hmrc.sbtdistributables.SbtDistributablesPlugin.publishingSettings
+import uk.gov.hmrc.sbtdistributables.SbtDistributablesPlugin
 
 val appName = "transits-movements-trader-at-departure-stub"
 
-val silencerVersion = "1.7.0"
-
 lazy val microservice = Project(appName, file("."))
-  .enablePlugins(play.sbt.PlayScala, SbtAutoBuildPlugin, SbtGitVersioning, SbtDistributablesPlugin, SbtArtifactory)
+  .enablePlugins(play.sbt.PlayScala, SbtAutoBuildPlugin, SbtDistributablesPlugin)
   .disablePlugins(JUnitXmlReportPlugin)
+  .settings(SbtDistributablesPlugin.publishingSettings)
+  .settings(inThisBuild(scalafmtOnCompile := true))
+  .settings(scalacSettings)
   .settings(
     majorVersion := 0,
-    scalacOptions ++= Seq(
-      "-P:silencer:pathFilters=routes"
-    ),
-    libraryDependencies ++= AppDependencies.compile ++ AppDependencies.test ++ Seq(
-      compilerPlugin("com.github.ghik" % "silencer-plugin" % silencerVersion cross CrossVersion.full),
-      "com.github.ghik" % "silencer-lib" % silencerVersion % Provided cross CrossVersion.full
-    )
+    scalaVersion := "2.12.14",
+    resolvers += Resolver.jcenterRepo,
+    PlayKeys.playDefaultPort := 9491,
+    libraryDependencies ++= AppDependencies.compile ++ AppDependencies.test
   )
-  .settings(publishingSettings: _*)
-  .settings(resolvers += Resolver.jcenterRepo)
-  .settings(PlayKeys.playDefaultPort := 9491)
-  .settings(scalaVersion := "2.12.11")
-  .settings(scalafmtOnCompile in ThisBuild := true)
+
+lazy val scalacSettings = Def.settings(
+  // Disable warnings arising from generated routing code
+  scalacOptions += "-Wconf:src=routes/.*:silent",
+  // Disable fatal warnings and warnings from discarding values
+  scalacOptions ~= {
+    opts =>
+      opts.filterNot(Set("-Xfatal-warnings", "-Ywarn-value-discard", "-Ywarn-unused:params"))
+  }
+)
