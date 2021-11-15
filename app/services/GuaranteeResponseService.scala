@@ -42,9 +42,13 @@ import scala.util.Random
 import scala.xml.NodeSeq
 
 class GuaranteeResponseService @Inject()(connector: GuaranteeTestSupportConnector)(implicit ec: ExecutionContext) {
-  private val FunctionalNack = "906"
-  private val XmlNack        = "917"
-  private val Timeout        = "000"
+  private val NotMatchedErrorType: ErrorType               = ErrorType(12)
+  private val UnsupportedGuaranteeTypeErrorType: ErrorType = ErrorType(14)
+
+  private val FunctionalNack           = "906"
+  private val UnsupportedGuaranteeType = "914"
+  private val XmlNack                  = "917"
+  private val Timeout                  = "000"
 
   // The schema mandates 16 chars maximum including the decimal point
   private val Decimal16 = 9999999999999.99
@@ -54,7 +58,10 @@ class GuaranteeResponseService @Inject()(connector: GuaranteeTestSupportConnecto
    */
   private def responseFromCode(responseCode: String): Option[BalanceRequestResponse] = responseCode match {
     case FunctionalNack =>
-      val error = FunctionalError(ErrorType(12), "Foo.Bar(1).Baz", None)
+      val error = FunctionalError(NotMatchedErrorType, "Foo.Bar(1).Baz", None)
+      Some(BalanceRequestFunctionalError(NonEmptyList.one(error)))
+    case UnsupportedGuaranteeType =>
+      val error = FunctionalError(UnsupportedGuaranteeTypeErrorType, "Foo.Bar(1).Baz", None)
       Some(BalanceRequestFunctionalError(NonEmptyList.one(error)))
     case XmlNack =>
       val error = XmlError(ErrorType(14), "Foo.Bar(1).Baz", None)
