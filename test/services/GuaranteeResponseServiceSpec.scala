@@ -21,11 +21,7 @@ import models.BalanceRequestFunctionalError
 import models.BalanceRequestSuccess
 import models.BalanceRequestXmlError
 import models.SimulatedGuaranteeResponse
-import models.values.CurrencyCode
-import models.values.GuaranteeReference
-import models.values.MessageSender
-import models.values.TaxIdentifier
-import models.values.UniqueReference
+import models.values.{CurrencyCode, ErrorType, GuaranteeReference, MessageSender, TaxIdentifier, UniqueReference}
 import org.scalacheck.Gen
 import org.scalatest.Inside
 import org.scalatest.OptionValues
@@ -36,11 +32,11 @@ import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
 import play.api.test.Helpers._
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.http.HttpResponse
-
 import java.time.OffsetDateTime
 import java.time.ZoneOffset
 import java.time.format.DateTimeFormatter
 import java.util.UUID
+
 import scala.concurrent.ExecutionContext.Implicits.global
 
 class GuaranteeResponseServiceSpec extends AnyFreeSpec with Matchers with OptionValues with ScalaFutures with Inside with ScalaCheckPropertyChecks {
@@ -84,7 +80,7 @@ class GuaranteeResponseServiceSpec extends AnyFreeSpec with Matchers with Option
 
   "GuaranteeResponseService.buildSimulatedResponseFor" - {
     "when given access code ending with 906" - {
-      "should trigger functional error response" in {
+      "should trigger functional error response  with the Error Type of 12" in {
         val simulatedResponse = service().buildSimulatedResponseFor(CD034A("E906")).value
 
         inside(simulatedResponse) {
@@ -93,6 +89,24 @@ class GuaranteeResponseServiceSpec extends AnyFreeSpec with Matchers with Option
             grn mustBe GuaranteeReference("05DE3300BE0001067A001017")
             origRef mustBe UniqueReference("7acb933dbe7039")
             response mustBe a[BalanceRequestFunctionalError]
+            val errors = response.asInstanceOf[BalanceRequestFunctionalError].errors.toList
+            errors.map(_.errorType).contains(ErrorType(12))
+        }
+      }
+    }
+
+    "when given access code ending with 914" - {
+      "should trigger functional error response with the Error Type of 14" in {
+        val simulatedResponse = service().buildSimulatedResponseFor(CD034A("E906")).value
+
+        inside(simulatedResponse) {
+          case SimulatedGuaranteeResponse(taxId, grn, origRef, response) =>
+            taxId mustBe TaxIdentifier("GB12345678900")
+            grn mustBe GuaranteeReference("05DE3300BE0001067A001017")
+            origRef mustBe UniqueReference("7acb933dbe7039")
+            response mustBe a[BalanceRequestFunctionalError]
+            val errors = response.asInstanceOf[BalanceRequestFunctionalError].errors.toList
+            errors.map(_.errorType).contains(ErrorType(14))
         }
       }
     }
