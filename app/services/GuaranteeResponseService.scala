@@ -45,10 +45,15 @@ class GuaranteeResponseService @Inject()(connector: GuaranteeTestSupportConnecto
   private val NotMatchedErrorType: ErrorType               = ErrorType(12)
   private val UnsupportedGuaranteeTypeErrorType: ErrorType = ErrorType(14)
 
-  private val FunctionalNack           = "906"
-  private val UnsupportedGuaranteeType = "914"
-  private val XmlNack                  = "917"
-  private val Timeout                  = "000"
+  private val FunctionalNack                  = "906"
+  private val InvalidEori                     = "913"
+  private val UnsupportedGuaranteeType        = "914"
+  private val InvalidAccessCode               = "915"
+  private val InvalidGuaranteeReferenceNumber = "916"
+  private val XmlNack                         = "917"
+  private val GrnDoesNotMatchEori             = "918"
+  private val MultipleMatchErrors             = "919"
+  private val Timeout                         = "000"
 
   // The schema mandates 16 chars maximum including the decimal point
   private val Decimal16 = 9999999999999.99
@@ -60,8 +65,25 @@ class GuaranteeResponseService @Inject()(connector: GuaranteeTestSupportConnecto
     case FunctionalNack =>
       val error = FunctionalError(NotMatchedErrorType, "Foo.Bar(1).Baz", None)
       Some(BalanceRequestFunctionalError(NonEmptyList.one(error)))
+    case InvalidEori =>
+      val error = FunctionalError(NotMatchedErrorType, "RC1.TIN", None)
+      Some(BalanceRequestFunctionalError(NonEmptyList.one(error)))
+    case InvalidAccessCode =>
+      val error = FunctionalError(NotMatchedErrorType, "GRR(1).ACC(1).Access code", None)
+      Some(BalanceRequestFunctionalError(NonEmptyList.one(error)))
+    case InvalidGuaranteeReferenceNumber =>
+      val error = FunctionalError(NotMatchedErrorType, "GRR(1).Guarantee reference number (GRN)", None)
+      Some(BalanceRequestFunctionalError(NonEmptyList.one(error)))
+    case GrnDoesNotMatchEori =>
+      val error = FunctionalError(NotMatchedErrorType, "GRR(1).OTG(1).TIN", None)
+      Some(BalanceRequestFunctionalError(NonEmptyList.one(error)))
+    case MultipleMatchErrors =>
+      val error1 = FunctionalError(NotMatchedErrorType, "RC1.TIN", None)
+      val error2 = FunctionalError(NotMatchedErrorType, "GRR(1).OTG(1).TIN", None)
+      val error3 = FunctionalError(ErrorType(26), "RC1.TIN", None)
+      Some(BalanceRequestFunctionalError(NonEmptyList(error1, List(error2, error3))))
     case UnsupportedGuaranteeType =>
-      val error = FunctionalError(UnsupportedGuaranteeTypeErrorType, "Foo.Bar(1).Baz", None)
+      val error = FunctionalError(UnsupportedGuaranteeTypeErrorType, "GRR(1).GQY(1).Query identifier", Some("R261"))
       Some(BalanceRequestFunctionalError(NonEmptyList.one(error)))
     case XmlNack =>
       val error = XmlError(ErrorType(14), "Foo.Bar(1).Baz", None)

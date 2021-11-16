@@ -21,6 +21,7 @@ import models.BalanceRequestFunctionalError
 import models.BalanceRequestSuccess
 import models.BalanceRequestXmlError
 import models.SimulatedGuaranteeResponse
+import models.errors.FunctionalError
 import models.values.{CurrencyCode, ErrorType, GuaranteeReference, MessageSender, TaxIdentifier, UniqueReference}
 import org.scalacheck.Gen
 import org.scalatest.Inside
@@ -32,11 +33,11 @@ import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
 import play.api.test.Helpers._
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.http.HttpResponse
+
 import java.time.OffsetDateTime
 import java.time.ZoneOffset
 import java.time.format.DateTimeFormatter
 import java.util.UUID
-
 import scala.concurrent.ExecutionContext.Implicits.global
 
 class GuaranteeResponseServiceSpec extends AnyFreeSpec with Matchers with OptionValues with ScalaFutures with Inside with ScalaCheckPropertyChecks {
@@ -71,11 +72,14 @@ class GuaranteeResponseServiceSpec extends AnyFreeSpec with Matchers with Option
   def service(response: HttpResponse = HttpResponse(OK, "")) =
     new GuaranteeResponseService(FakeGuaranteeTestSupportConnector(response))
 
+  private val NotMatchedErrorType: ErrorType               = ErrorType(12)
+  private val UnsupportedGuaranteeTypeErrorType: ErrorType = ErrorType(14)
+
   val accessCodeGen = Gen
     .stringOfN(4, Gen.alphaNumChar)
     .suchThat {
       str =>
-        !Set("906", "917").contains(str.takeRight(3))
+        !Set("906", "913", "914", "915", "916", "917", "918", "919", "000").contains(str.takeRight(3))
     }
 
   "GuaranteeResponseService.buildSimulatedResponseFor" - {
@@ -90,14 +94,15 @@ class GuaranteeResponseServiceSpec extends AnyFreeSpec with Matchers with Option
             origRef mustBe UniqueReference("7acb933dbe7039")
             response mustBe a[BalanceRequestFunctionalError]
             val errors = response.asInstanceOf[BalanceRequestFunctionalError].errors.toList
-            errors.map(_.errorType).contains(ErrorType(12))
+            val error  = FunctionalError(NotMatchedErrorType, "Foo.Bar(1).Baz", None)
+            errors.contains(error) mustBe true
         }
       }
     }
 
-    "when given access code ending with 914" - {
-      "should trigger functional error response with the Error Type of 14" in {
-        val simulatedResponse = service().buildSimulatedResponseFor(CD034A("E906")).value
+    "when given access code ending with 913" - {
+      "should trigger functional error response with the Error Type of 12 incorrect EORI" in {
+        val simulatedResponse = service().buildSimulatedResponseFor(CD034A("E913")).value
 
         inside(simulatedResponse) {
           case SimulatedGuaranteeResponse(taxId, grn, origRef, response) =>
@@ -106,7 +111,59 @@ class GuaranteeResponseServiceSpec extends AnyFreeSpec with Matchers with Option
             origRef mustBe UniqueReference("7acb933dbe7039")
             response mustBe a[BalanceRequestFunctionalError]
             val errors = response.asInstanceOf[BalanceRequestFunctionalError].errors.toList
-            errors.map(_.errorType).contains(ErrorType(14))
+            val error  = FunctionalError(NotMatchedErrorType, "RC1.TIN", None)
+            errors.contains(error) mustBe true
+        }
+      }
+    }
+
+    "when given access code ending with 914" - {
+      "should trigger functional error response with the Error Type of 14" in {
+        val simulatedResponse = service().buildSimulatedResponseFor(CD034A("E914")).value
+
+        inside(simulatedResponse) {
+          case SimulatedGuaranteeResponse(taxId, grn, origRef, response) =>
+            taxId mustBe TaxIdentifier("GB12345678900")
+            grn mustBe GuaranteeReference("05DE3300BE0001067A001017")
+            origRef mustBe UniqueReference("7acb933dbe7039")
+            response mustBe a[BalanceRequestFunctionalError]
+            val errors = response.asInstanceOf[BalanceRequestFunctionalError].errors.toList
+            val error  = FunctionalError(UnsupportedGuaranteeTypeErrorType, "GRR(1).GQY(1).Query identifier", Some("R261"))
+            errors.contains(error) mustBe true
+        }
+      }
+    }
+
+    "when given access code ending with 915" - {
+      "should trigger functional error response with the Error Type of 12 incorrect access code" in {
+        val simulatedResponse = service().buildSimulatedResponseFor(CD034A("E915")).value
+
+        inside(simulatedResponse) {
+          case SimulatedGuaranteeResponse(taxId, grn, origRef, response) =>
+            taxId mustBe TaxIdentifier("GB12345678900")
+            grn mustBe GuaranteeReference("05DE3300BE0001067A001017")
+            origRef mustBe UniqueReference("7acb933dbe7039")
+            response mustBe a[BalanceRequestFunctionalError]
+            val errors = response.asInstanceOf[BalanceRequestFunctionalError].errors.toList
+            val error  = FunctionalError(NotMatchedErrorType, "GRR(1).ACC(1).Access code", None)
+            errors.contains(error) mustBe true
+        }
+      }
+    }
+
+    "when given access code ending with 916" - {
+      "should trigger functional error response with the Error Type of 12 incorrect guarantee reference number" in {
+        val simulatedResponse = service().buildSimulatedResponseFor(CD034A("E916")).value
+
+        inside(simulatedResponse) {
+          case SimulatedGuaranteeResponse(taxId, grn, origRef, response) =>
+            taxId mustBe TaxIdentifier("GB12345678900")
+            grn mustBe GuaranteeReference("05DE3300BE0001067A001017")
+            origRef mustBe UniqueReference("7acb933dbe7039")
+            response mustBe a[BalanceRequestFunctionalError]
+            val errors = response.asInstanceOf[BalanceRequestFunctionalError].errors.toList
+            val error  = FunctionalError(NotMatchedErrorType, "GRR(1).Guarantee reference number (GRN)", None)
+            errors.contains(error) mustBe true
         }
       }
     }
@@ -121,6 +178,42 @@ class GuaranteeResponseServiceSpec extends AnyFreeSpec with Matchers with Option
             grn mustBe GuaranteeReference("05DE3300BE0001067A001017")
             origRef mustBe UniqueReference("7acb933dbe7039")
             response mustBe a[BalanceRequestXmlError]
+        }
+      }
+    }
+
+    "when given access code ending with 918" - {
+      "should trigger functional error response with the Error Type of 12 guarantee reference number does not match Eori" in {
+        val simulatedResponse = service().buildSimulatedResponseFor(CD034A("E918")).value
+
+        inside(simulatedResponse) {
+          case SimulatedGuaranteeResponse(taxId, grn, origRef, response) =>
+            taxId mustBe TaxIdentifier("GB12345678900")
+            grn mustBe GuaranteeReference("05DE3300BE0001067A001017")
+            origRef mustBe UniqueReference("7acb933dbe7039")
+            response mustBe a[BalanceRequestFunctionalError]
+            val errors = response.asInstanceOf[BalanceRequestFunctionalError].errors.toList
+            val error  = FunctionalError(NotMatchedErrorType, "GRR(1).OTG(1).TIN", None)
+            errors.contains(error) mustBe true
+        }
+      }
+    }
+
+    "when given access code ending with 919" - {
+      "should trigger functional error response with multiple match errors" in {
+        val simulatedResponse = service().buildSimulatedResponseFor(CD034A("E919")).value
+
+        inside(simulatedResponse) {
+          case SimulatedGuaranteeResponse(taxId, grn, origRef, response) =>
+            taxId mustBe TaxIdentifier("GB12345678900")
+            grn mustBe GuaranteeReference("05DE3300BE0001067A001017")
+            origRef mustBe UniqueReference("7acb933dbe7039")
+            response mustBe a[BalanceRequestFunctionalError]
+            val errors = response.asInstanceOf[BalanceRequestFunctionalError].errors.toList
+            val error1 = FunctionalError(NotMatchedErrorType, "RC1.TIN", None)
+            val error2 = FunctionalError(NotMatchedErrorType, "GRR(1).OTG(1).TIN", None)
+            val error3 = FunctionalError(ErrorType(26), "RC1.TIN", None)
+            errors mustEqual List(error1, error2, error3)
         }
       }
     }
