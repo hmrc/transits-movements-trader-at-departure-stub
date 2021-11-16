@@ -21,6 +21,7 @@ import models.BalanceRequestFunctionalError
 import models.BalanceRequestSuccess
 import models.BalanceRequestXmlError
 import models.SimulatedGuaranteeResponse
+import models.errors.FunctionalError
 import models.values.{CurrencyCode, ErrorType, GuaranteeReference, MessageSender, TaxIdentifier, UniqueReference}
 import org.scalacheck.Gen
 import org.scalatest.Inside
@@ -32,11 +33,11 @@ import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
 import play.api.test.Helpers._
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.http.HttpResponse
+
 import java.time.OffsetDateTime
 import java.time.ZoneOffset
 import java.time.format.DateTimeFormatter
 import java.util.UUID
-
 import scala.concurrent.ExecutionContext.Implicits.global
 
 class GuaranteeResponseServiceSpec extends AnyFreeSpec with Matchers with OptionValues with ScalaFutures with Inside with ScalaCheckPropertyChecks {
@@ -75,7 +76,7 @@ class GuaranteeResponseServiceSpec extends AnyFreeSpec with Matchers with Option
     .stringOfN(4, Gen.alphaNumChar)
     .suchThat {
       str =>
-        !Set("906", "917").contains(str.takeRight(3))
+        !Set("906", "917", "914").contains(str.takeRight(3))
     }
 
   "GuaranteeResponseService.buildSimulatedResponseFor" - {
@@ -90,14 +91,15 @@ class GuaranteeResponseServiceSpec extends AnyFreeSpec with Matchers with Option
             origRef mustBe UniqueReference("7acb933dbe7039")
             response mustBe a[BalanceRequestFunctionalError]
             val errors = response.asInstanceOf[BalanceRequestFunctionalError].errors.toList
-            errors.map(_.errorType).contains(ErrorType(12))
+            val error  = FunctionalError(ErrorType(12), "Foo.Bar(1).Baz", None)
+            errors.contains(error) mustBe true
         }
       }
     }
 
     "when given access code ending with 914" - {
       "should trigger functional error response with the Error Type of 14" in {
-        val simulatedResponse = service().buildSimulatedResponseFor(CD034A("E906")).value
+        val simulatedResponse = service().buildSimulatedResponseFor(CD034A("E914")).value
 
         inside(simulatedResponse) {
           case SimulatedGuaranteeResponse(taxId, grn, origRef, response) =>
@@ -106,7 +108,8 @@ class GuaranteeResponseServiceSpec extends AnyFreeSpec with Matchers with Option
             origRef mustBe UniqueReference("7acb933dbe7039")
             response mustBe a[BalanceRequestFunctionalError]
             val errors = response.asInstanceOf[BalanceRequestFunctionalError].errors.toList
-            errors.map(_.errorType).contains(ErrorType(14))
+            val error  = FunctionalError(ErrorType(14), "GRR(1).GQY(1).Query identifier", Some("R261"))
+            errors.contains(error) mustBe true
         }
       }
     }

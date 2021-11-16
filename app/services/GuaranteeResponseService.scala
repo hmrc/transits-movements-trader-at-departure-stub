@@ -61,7 +61,7 @@ class GuaranteeResponseService @Inject()(connector: GuaranteeTestSupportConnecto
       val error = FunctionalError(NotMatchedErrorType, "Foo.Bar(1).Baz", None)
       Some(BalanceRequestFunctionalError(NonEmptyList.one(error)))
     case UnsupportedGuaranteeType =>
-      val error = FunctionalError(UnsupportedGuaranteeTypeErrorType, "Foo.Bar(1).Baz", None)
+      val error = FunctionalError(UnsupportedGuaranteeTypeErrorType, "GRR(1).GQY(1).Query identifier", Some("R261"))
       Some(BalanceRequestFunctionalError(NonEmptyList.one(error)))
     case XmlNack =>
       val error = XmlError(ErrorType(14), "Foo.Bar(1).Baz", None)
