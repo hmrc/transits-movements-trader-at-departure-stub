@@ -42,8 +42,8 @@ import scala.util.Random
 import scala.xml.NodeSeq
 
 class GuaranteeResponseService @Inject()(connector: GuaranteeTestSupportConnector)(implicit ec: ExecutionContext) {
-  private val NotMatchedErrorType: ErrorType               = ErrorType(12)
-  private val UnsupportedGuaranteeTypeErrorType: ErrorType = ErrorType(14)
+  private val NotMatchedErrorType: ErrorType  = ErrorType(12)
+  private val InvalidDataErrorType: ErrorType = ErrorType(14)
 
   private val FunctionalNack                  = "906"
   private val InvalidEori                     = "913"
@@ -53,6 +53,7 @@ class GuaranteeResponseService @Inject()(connector: GuaranteeTestSupportConnecto
   private val XmlNack                         = "917"
   private val GrnDoesNotMatchEori             = "918"
   private val MultipleMatchErrors             = "919"
+  private val UnsupportedDataError            = "920"
   private val Timeout                         = "000"
 
   // The schema mandates 16 chars maximum including the decimal point
@@ -82,8 +83,11 @@ class GuaranteeResponseService @Inject()(connector: GuaranteeTestSupportConnecto
       val error2 = FunctionalError(NotMatchedErrorType, "GRR(1).OTG(1).TIN", None)
       val error3 = FunctionalError(ErrorType(26), "RC1.TIN", None)
       Some(BalanceRequestFunctionalError(NonEmptyList(error1, List(error2, error3))))
+    case UnsupportedDataError =>
+      val error = FunctionalError(InvalidDataErrorType, "GRR(1).GQY(1).Query identifier", None)
+      Some(BalanceRequestFunctionalError(NonEmptyList.one(error)))
     case UnsupportedGuaranteeType =>
-      val error = FunctionalError(UnsupportedGuaranteeTypeErrorType, "GRR(1).GQY(1).Query identifier", Some("R261"))
+      val error = FunctionalError(InvalidDataErrorType, "GRR(1).GQY(1).Query identifier", Some("R261"))
       Some(BalanceRequestFunctionalError(NonEmptyList.one(error)))
     case XmlNack =>
       val error = XmlError(ErrorType(14), "Foo.Bar(1).Baz", None)
