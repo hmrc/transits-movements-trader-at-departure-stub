@@ -79,7 +79,7 @@ class GuaranteeResponseServiceSpec extends AnyFreeSpec with Matchers with Option
     .stringOfN(4, Gen.alphaNumChar)
     .suchThat {
       str =>
-        !Set("906", "913", "914", "915", "916", "917", "918", "919", "000").contains(str.takeRight(3))
+        !Set("906", "913", "914", "915", "916", "917", "918", "919", "920", "000").contains(str.takeRight(3))
     }
 
   "GuaranteeResponseService.buildSimulatedResponseFor" - {
@@ -118,7 +118,7 @@ class GuaranteeResponseServiceSpec extends AnyFreeSpec with Matchers with Option
     }
 
     "when given access code ending with 914" - {
-      "should trigger functional error response with the Error Type of 14" in {
+      "should trigger functional error response with the Error Type of 14 for an invalid Guarantee Type" in {
         val simulatedResponse = service().buildSimulatedResponseFor(CD034A("E914")).value
 
         inside(simulatedResponse) {
@@ -214,6 +214,23 @@ class GuaranteeResponseServiceSpec extends AnyFreeSpec with Matchers with Option
             val error2 = FunctionalError(NotMatchedErrorType, "GRR(1).OTG(1).TIN", None)
             val error3 = FunctionalError(ErrorType(26), "RC1.TIN", None)
             errors mustEqual List(error1, error2, error3)
+        }
+      }
+    }
+
+    "when given access code ending with 920" - {
+      "should trigger functional error response with the Error Type of 14 but not for an invalid Guarantee Type" in {
+        val simulatedResponse = service().buildSimulatedResponseFor(CD034A("E920")).value
+
+        inside(simulatedResponse) {
+          case SimulatedGuaranteeResponse(taxId, grn, origRef, response) =>
+            taxId mustBe TaxIdentifier("GB12345678900")
+            grn mustBe GuaranteeReference("05DE3300BE0001067A001017")
+            origRef mustBe UniqueReference("7acb933dbe7039")
+            response mustBe a[BalanceRequestFunctionalError]
+            val errors = response.asInstanceOf[BalanceRequestFunctionalError].errors.toList
+            val error  = FunctionalError(UnsupportedGuaranteeTypeErrorType, "GRR(1).GQY(1).Query identifier", None)
+            errors.contains(error) mustBe true
         }
       }
     }
