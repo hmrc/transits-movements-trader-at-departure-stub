@@ -49,6 +49,10 @@ class StubController @Inject()(appConfig: AppConfig,
   def nipost: Action[NodeSeq] =
     internal_post("ni endpoint called", appConfig.eisniBearerToken)
 
+  def notificationPost: Action[AnyContent] = Action {
+    Ok
+  }
+
   private def internal_post(logMessage: String, bearerToken: String): Action[NodeSeq] =
     Action.async(parse.xml) {
       implicit request: Request[NodeSeq] =>

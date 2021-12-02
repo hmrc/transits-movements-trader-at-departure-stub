@@ -2,6 +2,7 @@
 
 POST   /movements/departures/gb                                             controllers.StubController.gbpost
 POST   /movements/departures/ni                                             controllers.StubController.nipost
+POST   /movements/departure-notification                                    controllers.StubController.notificationPost
 GET    /movements/departures                                                controllers.StubController.get
 GET    /movements/departures/:departureId                                   controllers.StubController.getDeparture(departureId: Int)
 
