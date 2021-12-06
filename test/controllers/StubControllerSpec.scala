@@ -26,6 +26,7 @@ import org.scalatestplus.play.guice.GuiceOneAppPerSuite
 import play.api.Configuration
 import play.api.Environment
 import play.api.http.HeaderNames
+import play.api.libs.json.Json
 import play.api.mvc.Headers
 import play.api.test.FakeHeaders
 import play.api.test.FakeRequest
@@ -367,4 +368,16 @@ class StubControllerSpec extends AnyFreeSpec with Matchers with GuiceOneAppPerSu
     }
   }
 
+  "notificationPost" - {
+    "should return 200 OK" in {
+      val result = controller().notificationPost(
+        FakeRequest(
+          method  = "POST",
+          uri     = routes.StubController.notificationPost.url,
+          headers = FakeHeaders(Seq()),
+          body    = Json.obj("id" -> "TEST-ID", "messageCode" -> "IE015", "timestamp" -> "2021-12-01T08:58:46", "office" -> "GB")
+        ))
+      status(result) mustEqual OK
+    }
+  }
 }
