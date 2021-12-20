@@ -26,8 +26,11 @@ class PDFRetrievalController @Inject()(cc: ControllerComponents) extends Backend
 
   def getAccompanyingDocument(departureId: Int): Action[AnyContent] =
     Action {
-      val path     = Paths.get(getClass.getResource("/files/EmptyTAD.pdf").toURI)
+      val fileName = "EmptyTAD.pdf"
+      val path     = Paths.get(getClass.getResource(s"/files/$fileName").toURI)
       val blankPdf = Files.readAllBytes(path)
-      Ok(blankPdf)
+      Ok(blankPdf).withHeaders(
+        CONTENT_DISPOSITION -> s"attachment; filename=$fileName"
+      )
     }
 }
