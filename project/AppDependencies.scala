@@ -7,7 +7,7 @@ object AppDependencies {
   val catsVersion = "2.6.1"
 
   val compile = Seq(
-    "uk.gov.hmrc"   %% "bootstrap-backend-play-28" % "5.12.0",
+    "uk.gov.hmrc"   %% "bootstrap-backend-play-28" % "5.16.0",
     "uk.gov.hmrc"   %% "play-json-union-formatter" % "1.15.0-play-28",
     "io.lemonlabs"  %% "scala-uri"                 % "3.5.0",
     "org.typelevel" %% "cats-core"                 % catsVersion
