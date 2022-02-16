@@ -23,20 +23,22 @@ import utils.JsonUtils
 
 class DepartureRejectionController @Inject()(cc: ControllerComponents, jsonUtils: JsonUtils) extends BackendController(cc) {
 
-  private val GuaranteeNotValidDepartureId: Int        = 27
-  private val GuaranteeNotValidMessageId: Int          = 2
-  private val DeclarationRejectionDepartureId: Int     = 33
-  private val DeclarationRejectionMessageId: Int       = 2
-  private val CancellationDecisionUpdateId: Int        = 39
-  private val CancellationDecisionUpdateMessageId: Int = 2
-  private val DeclarationCancellationId: Int           = 45
-  private val DeclarationCancellationMessageId: Int    = 2
-  private val NoReleaseForTransitId: Int               = 31
-  private val NoReleaseForTransitMessageId: Int        = 2
-  private val ControlDecisionId: Int                   = 32
-  private val ControlDecisionMessageId: Int            = 2
-  private val CancellationRequestDepartureId: Int      = 23
-  private val MRNAllocatedMessageId: Int               = 2
+  private val GuaranteeNotValidDepartureId: Int                 = 27
+  private val GuaranteeNotValidMessageId: Int                   = 2
+  private val DeclarationRejectionDepartureId: Int              = 33
+  private val DeclarationRejectionMessageId: Int                = 2
+  private val CancellationDecisionUpdateId: Int                 = 39
+  private val CancellationDecisionUpdateMessageId: Int          = 2
+  private val CancellationDecisionUpdateRejectionId: Int        = 88
+  private val CancellationDecisionUpdateMessageRejectionId: Int = 2
+  private val DeclarationCancellationId: Int                    = 45
+  private val DeclarationCancellationMessageId: Int             = 2
+  private val NoReleaseForTransitId: Int                        = 31
+  private val NoReleaseForTransitMessageId: Int                 = 2
+  private val ControlDecisionId: Int                            = 32
+  private val ControlDecisionMessageId: Int                     = 2
+  private val CancellationRequestDepartureId: Int               = 23
+  private val MRNAllocatedMessageId: Int                        = 2
 
   def getSummary(departureId: Int): Action[AnyContent] = Action {
     departureId match {
@@ -48,6 +50,9 @@ class DepartureRejectionController @Inject()(cc: ControllerComponents, jsonUtils
         Ok(json).as("application/json")
       case CancellationDecisionUpdateId =>
         val json = jsonUtils.readJsonFromFile("conf/resources/departure-summary-cancellation-decision-update.json")
+        Ok(json).as("application/json")
+      case CancellationDecisionUpdateRejectionId =>
+        val json = jsonUtils.readJsonFromFile("conf/resources/departure-summary-cancellation-decision-update-rejection.json")
         Ok(json).as("application/json")
       case DeclarationCancellationId =>
         val json = jsonUtils.readJsonFromFile("conf/resources/departure-summary-user-submits-declaration-cancellation.json")
@@ -74,6 +79,9 @@ class DepartureRejectionController @Inject()(cc: ControllerComponents, jsonUtils
         Ok(jsonUtils.readJsonFromFile("conf/resources/declaration-rejection.json")).as("application/json")
       case (CancellationDecisionUpdateId, CancellationDecisionUpdateMessageId) =>
         Ok(jsonUtils.readJsonFromFile("conf/resources/cancellation-decision-message-status-update.json"))
+          .as("application/json")
+      case (CancellationDecisionUpdateRejectionId, CancellationDecisionUpdateMessageRejectionId) =>
+        Ok(jsonUtils.readJsonFromFile("conf/resources/cancellation-decision-message-status-update-rejection.json"))
           .as("application/json")
       case (DeclarationCancellationId, DeclarationCancellationMessageId) =>
         Ok(jsonUtils.readJsonFromFile("conf/resources/user-submits-declaration-cancellation.json"))
