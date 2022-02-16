@@ -17,10 +17,10 @@
 package controllers
 
 import com.google.inject.Inject
+import controllers.DepartureRejectionController._
 import play.api.mvc.{Action, AnyContent, ControllerComponents}
 import uk.gov.hmrc.play.bootstrap.backend.controller.BackendController
 import utils.JsonUtils
-import utils.MessageIds._
 
 class DepartureRejectionController @Inject()(cc: ControllerComponents, jsonUtils: JsonUtils) extends BackendController(cc) {
 
@@ -87,4 +87,36 @@ class DepartureRejectionController @Inject()(cc: ControllerComponents, jsonUtils
       Accepted
   }
 
+}
+
+object DepartureRejectionController {
+  val GuaranteeNotValidDepartureId: Int                 = 27
+  val GuaranteeNotValidMessageId: Int                   = 2
+  val DeclarationRejectionDepartureId: Int              = 33
+  val DeclarationRejectionMessageId: Int                = 2
+  val CancellationDecisionUpdateId: Int                 = 39
+  val CancellationDecisionUpdateMessageId: Int          = 2
+  val CancellationDecisionUpdateRejectionId: Int        = 88
+  val CancellationDecisionUpdateMessageRejectionId: Int = 2
+  val DeclarationCancellationId: Int                    = 45
+  val DeclarationCancellationMessageId: Int             = 2
+  val NoReleaseForTransitId: Int                        = 31
+  val NoReleaseForTransitMessageId: Int                 = 2
+  val ControlDecisionId: Int                            = 32
+  val ControlDecisionMessageId: Int                     = 2
+  val CancellationRequestDepartureId: Int               = 23
+  val MRNAllocatedMessageId: Int                        = 2
+  val departureId                                       = 27
+  val guaranteeInValidMessageId                         = 2
+  val declarationRejectId                               = 33
+  val declarationRejectMessageId                        = 2
+  val cancellationDecisionUpdateId: Int                 = 39
+  val cancellationDecisionUpdateMessageId: Int          = 2
+  val declarationCancellationId: Int                    = 45
+  val declarationCancellationMessageId: Int             = 2
+  val invalidDepartureId                                = 11111
+  val controlDecisionId: Int                            = 32
+  val controlDecisionMessageId: Int                     = 2
+  val cancellationRequestDepartureId: Int               = 23
+  val mRNAllocatedMessageId: Int                        = 2
 }
