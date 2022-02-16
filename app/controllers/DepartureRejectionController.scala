@@ -20,25 +20,9 @@ import com.google.inject.Inject
 import play.api.mvc.{Action, AnyContent, ControllerComponents}
 import uk.gov.hmrc.play.bootstrap.backend.controller.BackendController
 import utils.JsonUtils
+import utils.MessageIds._
 
 class DepartureRejectionController @Inject()(cc: ControllerComponents, jsonUtils: JsonUtils) extends BackendController(cc) {
-
-  private val GuaranteeNotValidDepartureId: Int                 = 27
-  private val GuaranteeNotValidMessageId: Int                   = 2
-  private val DeclarationRejectionDepartureId: Int              = 33
-  private val DeclarationRejectionMessageId: Int                = 2
-  private val CancellationDecisionUpdateId: Int                 = 39
-  private val CancellationDecisionUpdateMessageId: Int          = 2
-  private val CancellationDecisionUpdateRejectionId: Int        = 88
-  private val CancellationDecisionUpdateMessageRejectionId: Int = 2
-  private val DeclarationCancellationId: Int                    = 45
-  private val DeclarationCancellationMessageId: Int             = 2
-  private val NoReleaseForTransitId: Int                        = 31
-  private val NoReleaseForTransitMessageId: Int                 = 2
-  private val ControlDecisionId: Int                            = 32
-  private val ControlDecisionMessageId: Int                     = 2
-  private val CancellationRequestDepartureId: Int               = 23
-  private val MRNAllocatedMessageId: Int                        = 2
 
   def getSummary(departureId: Int): Action[AnyContent] = Action {
     departureId match {

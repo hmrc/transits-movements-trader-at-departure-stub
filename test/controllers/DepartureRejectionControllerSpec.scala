@@ -22,26 +22,9 @@ import org.scalatest.matchers.must.Matchers
 import org.scalatestplus.play.guice.GuiceOneAppPerSuite
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
+import utils.MessageIds._
 
 class DepartureRejectionControllerSpec extends AnyFreeSpec with Matchers with GuiceOneAppPerSuite with OptionValues {
-
-  private val departureId                                       = 27
-  private val guaranteeInValidMessageId                         = 2
-  private val declarationRejectId                               = 33
-  private val declarationRejectMessageId                        = 2
-  private val cancellationDecisionUpdateId: Int                 = 39
-  private val cancellationDecisionUpdateMessageId: Int          = 2
-  private val CancellationDecisionUpdateRejectionId: Int        = 88
-  private val CancellationDecisionUpdateMessageRejectionId: Int = 2
-  private val declarationCancellationId: Int                    = 45
-  private val declarationCancellationMessageId: Int             = 2
-  private val invalidDepartureId                                = 11111
-  private val NoReleaseForTransitId: Int                        = 31
-  private val NoReleaseForTransitMessageId: Int                 = 2
-  private val controlDecisionId: Int                            = 32
-  private val controlDecisionMessageId: Int                     = 2
-  private val cancellationRequestDepartureId: Int               = 23
-  private val mRNAllocatedMessageId: Int                        = 2
 
   "DepartureRejectionControllerSpec" - {
 
