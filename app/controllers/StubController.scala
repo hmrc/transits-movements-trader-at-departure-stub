@@ -28,11 +28,13 @@ import utils.JsonUtils
 import scala.concurrent.{ExecutionContext, Future}
 import scala.xml.NodeSeq
 
-class StubController @Inject()(appConfig: AppConfig,
-                               cc: ControllerComponents,
-                               headerValidatorService: HeaderValidatorService,
-                               responseService: SimulatedResponseService,
-                               jsonUtils: JsonUtils)(implicit ec: ExecutionContext)
+class StubController @Inject()(
+  appConfig: AppConfig,
+  cc: ControllerComponents,
+  headerValidatorService: HeaderValidatorService,
+  responseService: SimulatedResponseService,
+  jsonUtils: JsonUtils
+)(implicit ec: ExecutionContext)
     extends BackendController(cc)
     with Logging {
 
@@ -103,8 +105,8 @@ class StubController @Inject()(appConfig: AppConfig,
   /**
     * Method added for testing purposes
     *
-    * Simulates a timeout to trigger a GatewayTimeoutException in the departures backend if the provided request body
-    * includes a Timeout field set to true.
+    * Simulates a timeout to trigger a GatewayTimeoutException in the departures/arrivals backend if the provided
+    * request body includes a Timeout field set to true.
     * @param body the request body
     */
   private def simulateTimeoutIfRequired(body: NodeSeq): Unit =
