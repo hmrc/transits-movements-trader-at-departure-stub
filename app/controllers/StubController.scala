@@ -101,17 +101,16 @@ class StubController @Inject()(appConfig: AppConfig,
   }
 
   /**
-   * Method added for testing purposes
-   *
-   * Simulates a timeout to trigger a GatewayTimeoutException in the departures backend if the provided request body
-   * includes a Timeout field set to true.
-   * @param body the request body
-   */
-  private def simulateTimeoutIfRequired(body: NodeSeq): Unit = {
+    * Method added for testing purposes
+    *
+    * Simulates a timeout to trigger a GatewayTimeoutException in the departures backend if the provided request body
+    * includes a Timeout field set to true.
+    * @param body the request body
+    */
+  private def simulateTimeoutIfRequired(body: NodeSeq): Unit =
     (body \\ "_" \ "Timeout").text match {
       case "true" => Thread.sleep(30000)
       case _      => ()
     }
-  }
 
 }
