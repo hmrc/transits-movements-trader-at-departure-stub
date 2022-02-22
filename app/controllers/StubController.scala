@@ -20,24 +20,21 @@ import com.google.inject.Inject
 import config.AppConfig
 import play.api.Logging
 import play.api.http.HeaderNames
-import play.api.mvc.Action
-import play.api.mvc.AnyContent
-import play.api.mvc.ControllerComponents
-import play.api.mvc.Request
-import services.HeaderValidatorService
-import services.SimulatedResponseService
+import play.api.mvc.{Action, AnyContent, ControllerComponents, Request}
+import services.{HeaderValidatorService, SimulatedResponseService}
 import uk.gov.hmrc.play.bootstrap.backend.controller.BackendController
 import utils.JsonUtils
 
-import scala.concurrent.ExecutionContext
-import scala.concurrent.Future
+import scala.concurrent.{ExecutionContext, Future}
 import scala.xml.NodeSeq
 
-class StubController @Inject()(appConfig: AppConfig,
-                               cc: ControllerComponents,
-                               headerValidatorService: HeaderValidatorService,
-                               responseService: SimulatedResponseService,
-                               jsonUtils: JsonUtils)(implicit ec: ExecutionContext)
+class StubController @Inject()(
+  appConfig: AppConfig,
+  cc: ControllerComponents,
+  headerValidatorService: HeaderValidatorService,
+  responseService: SimulatedResponseService,
+  jsonUtils: JsonUtils
+)(implicit ec: ExecutionContext)
     extends BackendController(cc)
     with Logging {
 
@@ -68,6 +65,8 @@ class StubController @Inject()(appConfig: AppConfig,
                 } else {
                   logger.warn("validated XML")
                 }
+
+                simulateTimeoutIfRequired(request.body)
 
                 responseService.simulateResponseTo(request.body).map {
                   case Some(response) =>
@@ -102,5 +101,18 @@ class StubController @Inject()(appConfig: AppConfig,
 
       Ok(json).as("application/json")
   }
+
+  /**
+    * Method added for testing purposes
+    *
+    * Simulates a timeout to trigger a GatewayTimeoutException in the departures/arrivals backend if the provided
+    * request body includes a Timeout field set to true.
+    * @param body the request body
+    */
+  private def simulateTimeoutIfRequired(body: NodeSeq): Unit =
+    (body \\ "_" \ "Timeout").text match {
+      case "true" => Thread.sleep(30000)
+      case _      => ()
+    }
 
 }
