@@ -22,6 +22,7 @@ import org.scalatest.matchers.must.Matchers
 import org.scalatestplus.play.guice.GuiceOneAppPerSuite
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
+import controllers.DepartureRejectionController._
 
 class DepartureRejectionControllerSpec extends AnyFreeSpec with Matchers with GuiceOneAppPerSuite with OptionValues {
 
@@ -34,8 +35,6 @@ class DepartureRejectionControllerSpec extends AnyFreeSpec with Matchers with Gu
   private val declarationCancellationId: Int           = 45
   private val declarationCancellationMessageId: Int    = 2
   private val invalidDepartureId                       = 11111
-  private val NoReleaseForTransitId: Int               = 31
-  private val NoReleaseForTransitMessageId: Int        = 2
   private val controlDecisionId: Int                   = 32
   private val controlDecisionMessageId: Int            = 2
   private val cancellationRequestDepartureId: Int      = 23
@@ -78,11 +77,23 @@ class DepartureRejectionControllerSpec extends AnyFreeSpec with Matchers with Gu
         contentType(result).get mustEqual "application/json"
       }
 
-      "must return declaration cancellation summary" in {
+      "must return declaration cancellation summary for a Declaration cancellation" in {
 
         val request = FakeRequest(GET,
                                   routes.DepartureRejectionController
                                     .getSummary(declarationCancellationId)
+                                    .url)
+        val result = route(app, request).value
+
+        status(result) mustEqual OK
+        contentType(result).get mustEqual "application/json"
+      }
+
+      "must return declaration cancellation summary for a Cancellation rejected" in {
+
+        val request = FakeRequest(GET,
+                                  routes.DepartureRejectionController
+                                    .getSummary(CancellationDecisionUpdateRejectionId)
                                     .url)
         val result = route(app, request).value
 
@@ -160,12 +171,25 @@ class DepartureRejectionControllerSpec extends AnyFreeSpec with Matchers with Gu
         contentType(result).get mustEqual "application/json"
       }
 
-      "must return cancellation decision update message" in {
+      "must return cancellation decision update message fora Declaration cancelled" in {
 
         val request =
           FakeRequest(GET,
                       routes.DepartureRejectionController
                         .getMessage(cancellationDecisionUpdateId, cancellationDecisionUpdateMessageId)
+                        .url)
+        val result = route(app, request).value
+
+        status(result) mustEqual OK
+        contentType(result).get mustEqual "application/json"
+      }
+
+      "must return cancellation decision update message for a Cancellation rejected" in {
+
+        val request =
+          FakeRequest(GET,
+                      routes.DepartureRejectionController
+                        .getMessage(CancellationDecisionUpdateRejectionId, CancellationDecisionUpdateMessageRejectionId)
                         .url)
         val result = route(app, request).value
 
