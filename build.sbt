@@ -30,5 +30,8 @@ lazy val scalacSettings = Def.settings(
 lazy val testSettings = Def.settings(
   // Must fork so that config system properties are set
   fork := true,
-  Test / javaOptions += "--add-exports=java.base/sun.security.x509=ALL-UNNAMED"
+  Test / javaOptions ++= Seq(
+    "--add-exports=java.base/sun.security.x509=ALL-UNNAMED",
+    "--add-opens=java.base/sun.security.ssl=ALL-UNNAMED"
+  )
 )
