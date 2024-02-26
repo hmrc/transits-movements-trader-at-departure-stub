@@ -8,6 +8,7 @@ lazy val microservice = Project(appName, file("."))
   .settings(SbtDistributablesPlugin.publishingSettings)
   .settings(inThisBuild(scalafmtOnCompile := true))
   .settings(scalacSettings)
+  .settings(inConfig(Test)(testSettings))
   .settings(
     majorVersion := 0,
     scalaVersion := "2.12.14",
@@ -24,4 +25,10 @@ lazy val scalacSettings = Def.settings(
     opts =>
       opts.filterNot(Set("-Xfatal-warnings", "-Ywarn-value-discard", "-Ywarn-unused:params"))
   }
+)
+
+lazy val testSettings = Def.settings(
+  // Must fork so that config system properties are set
+  fork := true,
+  Test / javaOptions += "--add-exports=java.base/sun.security.x509=ALL-UNNAMED"
 )
