@@ -1,6 +1,5 @@
 import play.core.PlayVersion.current
 import play.sbt.PlayImport._
-import sbt.Keys.libraryDependencies
 import sbt._
 
 object AppDependencies {
@@ -21,6 +20,7 @@ object AppDependencies {
     "org.scalatestplus"      %% "scalacheck-1-15"     % "3.2.9.0",
     "org.scalatestplus"      %% "mockito-3-2"         % "3.1.2.0",
     "com.github.tomakehurst"  % "wiremock-standalone" % "2.27.2",
-    "com.vladsch.flexmark"    % "flexmark-all"        % "0.36.8"
+    "com.vladsch.flexmark"    % "flexmark-all"        % "0.36.8",
+    "com.typesafe"            % "ssl-config-core_2.12" % "0.2.1"
   ).map(_ % "test")
 }

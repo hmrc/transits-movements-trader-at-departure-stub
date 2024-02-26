@@ -13,12 +13,7 @@ lazy val microservice = Project(appName, file("."))
     scalaVersion := "2.12.14",
     resolvers += Resolver.jcenterRepo,
     PlayKeys.playDefaultPort := 9491,
-    libraryDependencies ++= AppDependencies.compile ++ AppDependencies.test,
-    fork := true,
-    javaOptions ++= Seq(
-      "--add-exports=java.base/sun.security.x509=ALL-UNNAMED",
-      "--add-opens=java.base/sun.security.ssl=ALL-UNNAMED"
-  )
+    libraryDependencies ++= AppDependencies.compile ++ AppDependencies.test
   )
 
 lazy val scalacSettings = Def.settings(
