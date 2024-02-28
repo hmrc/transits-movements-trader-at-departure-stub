@@ -23,7 +23,7 @@ import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
-class AppConfig @Inject()(config: Configuration) {
+class AppConfig @Inject() (config: Configuration) {
 
   lazy val guaranteeTestSupportUrl: AbsoluteUrl =
     config.get[Service]("microservice.services.guarantee-test-support").baseUrl

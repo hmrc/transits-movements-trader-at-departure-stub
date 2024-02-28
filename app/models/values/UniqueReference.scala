@@ -22,6 +22,7 @@ import play.api.libs.json.Json
 case class UniqueReference(value: String) extends AnyVal
 
 object UniqueReference {
+
   implicit val uniqueReferenceFormat: Format[UniqueReference] =
     Json.valueFormat[UniqueReference]
 }

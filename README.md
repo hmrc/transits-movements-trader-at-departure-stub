@@ -9,10 +9,9 @@ This mircoservice is in [Beta](https://www.gov.uk/help/beta). The signature may 
 
 
 ### Prerequisites   
-- Scala 2.12.11
-- Java 8
-- sbt > 1.3.13
-- MongoDB 3.6
+- Scala 2.13.12
+- Java 11
+- sbt > 1.9.7
 - [Service Manager](https://github.com/hmrc/service-manager)
 
 ### Development Setup

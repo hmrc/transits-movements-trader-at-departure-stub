@@ -27,6 +27,7 @@ case class FunctionalError(
 )
 
 object FunctionalError {
+
   implicit val functionalErrorFormat: OFormat[FunctionalError] =
     Json.format[FunctionalError]
 }

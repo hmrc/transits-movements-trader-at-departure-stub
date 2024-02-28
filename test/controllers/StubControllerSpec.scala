@@ -16,8 +16,8 @@
 
 package controllers
 
-import akka.actor.ActorSystem
-import akka.stream.Materializer
+import org.apache.pekko.actor.ActorSystem
+import org.apache.pekko.stream.Materializer
 import config.AppConfig
 import org.scalatest.OptionValues
 import org.scalatest.freespec.AnyFreeSpec
@@ -372,11 +372,12 @@ class StubControllerSpec extends AnyFreeSpec with Matchers with GuiceOneAppPerSu
     "should return 200 OK" in {
       val result = controller().notificationPost(
         FakeRequest(
-          method  = "POST",
-          uri     = routes.StubController.notificationPost.url,
+          method = "POST",
+          uri = routes.StubController.notificationPost.url,
           headers = FakeHeaders(Seq()),
-          body    = Json.obj("id" -> "TEST-ID", "messageCode" -> "IE015", "timestamp" -> "2021-12-01T08:58:46", "office" -> "GB")
-        ))
+          body = Json.obj("id" -> "TEST-ID", "messageCode" -> "IE015", "timestamp" -> "2021-12-01T08:58:46", "office" -> "GB")
+        )
+      )
       status(result) mustEqual OK
     }
   }

@@ -24,6 +24,7 @@ import uk.gov.hmrc.http.HttpResponse
 import scala.concurrent.Future
 
 case class FakeGuaranteeTestSupportConnector(response: HttpResponse) extends GuaranteeTestSupportConnector {
+
   override def simulateResponse(messageSender: MessageSender, simulatedResponse: SimulatedGuaranteeResponse)(implicit hc: HeaderCarrier): Future[HttpResponse] =
     Future.successful(response)
 }

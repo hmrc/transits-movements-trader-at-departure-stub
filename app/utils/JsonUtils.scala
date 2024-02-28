@@ -22,7 +22,7 @@ import com.google.inject.Inject
 import play.api.Environment
 import play.api.libs.json.{JsValue, Json}
 
-class JsonUtils @Inject()(environment: Environment) {
+class JsonUtils @Inject() (environment: Environment) {
 
   def readJsonFromFile(filePath: String): JsValue = {
     val jsonSchemaFile = environment.getExistingFile(filePath)

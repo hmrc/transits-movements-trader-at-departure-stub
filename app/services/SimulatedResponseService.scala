@@ -30,7 +30,7 @@ trait SimulatedResponseService {
   def simulateResponseTo(message: NodeSeq)(implicit hc: HeaderCarrier): Future[Option[HttpResponse]]
 }
 
-class SimulatedResponseServiceImpl @Inject()(guarantee: GuaranteeResponseService) extends SimulatedResponseService {
+class SimulatedResponseServiceImpl @Inject() (guarantee: GuaranteeResponseService) extends SimulatedResponseService {
 
   def simulateResponseTo(message: NodeSeq)(implicit hc: HeaderCarrier): Future[Option[HttpResponse]] = {
     val messageSender = for {

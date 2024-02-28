@@ -28,7 +28,7 @@ import utils.JsonUtils
 import scala.concurrent.{ExecutionContext, Future}
 import scala.xml.NodeSeq
 
-class StubController @Inject()(
+class StubController @Inject() (
   appConfig: AppConfig,
   cc: ControllerComponents,
   headerValidatorService: HeaderValidatorService,
@@ -102,8 +102,7 @@ class StubController @Inject()(
       Ok(json).as("application/json")
   }
 
-  /**
-    * Method added for testing purposes
+  /** Method added for testing purposes
     *
     * Simulates a timeout to trigger a GatewayTimeoutException in the departures/arrivals backend if the provided
     * request body includes a Timeout field set to true.

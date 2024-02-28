@@ -26,6 +26,7 @@ case class MessageSender(value: String) extends AnyVal {
 }
 
 object MessageSender {
+
   implicit val messageSenderFormat: Format[MessageSender] =
     Json.valueFormat[MessageSender]
 }

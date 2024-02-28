@@ -22,7 +22,7 @@ import play.api.mvc.{Action, AnyContent, ControllerComponents}
 import uk.gov.hmrc.play.bootstrap.backend.controller.BackendController
 import utils.JsonUtils
 
-class DepartureRejectionController @Inject()(cc: ControllerComponents, jsonUtils: JsonUtils) extends BackendController(cc) {
+class DepartureRejectionController @Inject() (cc: ControllerComponents, jsonUtils: JsonUtils) extends BackendController(cc) {
 
   def getSummary(departureId: Int): Action[AnyContent] = Action {
     departureId match {

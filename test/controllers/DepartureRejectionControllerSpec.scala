@@ -58,7 +58,8 @@ class DepartureRejectionControllerSpec extends AnyFreeSpec with Matchers with Gu
         val request = FakeRequest(GET,
                                   routes.DepartureRejectionController
                                     .getSummary(declarationRejectId)
-                                    .url)
+                                    .url
+        )
         val result = route(app, request).value
 
         status(result) mustEqual OK
@@ -70,7 +71,8 @@ class DepartureRejectionControllerSpec extends AnyFreeSpec with Matchers with Gu
         val request = FakeRequest(GET,
                                   routes.DepartureRejectionController
                                     .getSummary(cancellationDecisionUpdateId)
-                                    .url)
+                                    .url
+        )
         val result = route(app, request).value
 
         status(result) mustEqual OK
@@ -82,7 +84,8 @@ class DepartureRejectionControllerSpec extends AnyFreeSpec with Matchers with Gu
         val request = FakeRequest(GET,
                                   routes.DepartureRejectionController
                                     .getSummary(declarationCancellationId)
-                                    .url)
+                                    .url
+        )
         val result = route(app, request).value
 
         status(result) mustEqual OK
@@ -94,7 +97,8 @@ class DepartureRejectionControllerSpec extends AnyFreeSpec with Matchers with Gu
         val request = FakeRequest(GET,
                                   routes.DepartureRejectionController
                                     .getSummary(CancellationDecisionUpdateRejectionId)
-                                    .url)
+                                    .url
+        )
         val result = route(app, request).value
 
         status(result) mustEqual OK
@@ -106,7 +110,8 @@ class DepartureRejectionControllerSpec extends AnyFreeSpec with Matchers with Gu
         val request = FakeRequest(GET,
                                   routes.DepartureRejectionController
                                     .getSummary(NoReleaseForTransitId)
-                                    .url)
+                                    .url
+        )
         val result = route(app, request).value
 
         status(result) mustEqual OK
@@ -136,7 +141,8 @@ class DepartureRejectionControllerSpec extends AnyFreeSpec with Matchers with Gu
         val request = FakeRequest(GET,
                                   routes.DepartureRejectionController
                                     .getSummary(invalidDepartureId)
-                                    .url)
+                                    .url
+        )
         val result = route(app, request).value
 
         status(result) mustEqual BAD_REQUEST
@@ -152,7 +158,8 @@ class DepartureRejectionControllerSpec extends AnyFreeSpec with Matchers with Gu
           FakeRequest(GET,
                       routes.DepartureRejectionController
                         .getMessage(departureId, guaranteeInValidMessageId)
-                        .url)
+                        .url
+          )
         val result = route(app, request).value
 
         status(result) mustEqual OK
@@ -164,7 +171,8 @@ class DepartureRejectionControllerSpec extends AnyFreeSpec with Matchers with Gu
         val request = FakeRequest(GET,
                                   routes.DepartureRejectionController
                                     .getMessage(declarationRejectId, declarationRejectMessageId)
-                                    .url)
+                                    .url
+        )
         val result = route(app, request).value
 
         status(result) mustEqual OK
@@ -177,7 +185,8 @@ class DepartureRejectionControllerSpec extends AnyFreeSpec with Matchers with Gu
           FakeRequest(GET,
                       routes.DepartureRejectionController
                         .getMessage(cancellationDecisionUpdateId, cancellationDecisionUpdateMessageId)
-                        .url)
+                        .url
+          )
         val result = route(app, request).value
 
         status(result) mustEqual OK
@@ -190,7 +199,8 @@ class DepartureRejectionControllerSpec extends AnyFreeSpec with Matchers with Gu
           FakeRequest(GET,
                       routes.DepartureRejectionController
                         .getMessage(CancellationDecisionUpdateRejectionId, CancellationDecisionUpdateMessageRejectionId)
-                        .url)
+                        .url
+          )
         val result = route(app, request).value
 
         status(result) mustEqual OK
@@ -203,7 +213,8 @@ class DepartureRejectionControllerSpec extends AnyFreeSpec with Matchers with Gu
           FakeRequest(GET,
                       routes.DepartureRejectionController
                         .getMessage(declarationCancellationId, declarationCancellationMessageId)
-                        .url)
+                        .url
+          )
         val result = route(app, request).value
 
         status(result) mustEqual OK
@@ -216,7 +227,8 @@ class DepartureRejectionControllerSpec extends AnyFreeSpec with Matchers with Gu
           FakeRequest(GET,
                       routes.DepartureRejectionController
                         .getMessage(controlDecisionId, controlDecisionMessageId)
-                        .url)
+                        .url
+          )
         val result = route(app, request).value
 
         status(result) mustEqual OK
@@ -229,7 +241,8 @@ class DepartureRejectionControllerSpec extends AnyFreeSpec with Matchers with Gu
           FakeRequest(GET,
                       routes.DepartureRejectionController
                         .getMessage(cancellationRequestDepartureId, mRNAllocatedMessageId)
-                        .url)
+                        .url
+          )
         val result = route(app, request).value
 
         status(result) mustEqual OK
@@ -241,7 +254,8 @@ class DepartureRejectionControllerSpec extends AnyFreeSpec with Matchers with Gu
         val request = FakeRequest(GET,
                                   routes.DepartureRejectionController
                                     .getMessage(invalidDepartureId, guaranteeInValidMessageId)
-                                    .url)
+                                    .url
+        )
         val result = route(app, request).value
 
         status(result) mustEqual BAD_REQUEST
@@ -252,7 +266,8 @@ class DepartureRejectionControllerSpec extends AnyFreeSpec with Matchers with Gu
         val request = FakeRequest(GET,
                                   routes.DepartureRejectionController
                                     .getMessage(NoReleaseForTransitId, NoReleaseForTransitMessageId)
-                                    .url)
+                                    .url
+        )
         val result = route(app, request).value
 
         status(result) mustEqual OK

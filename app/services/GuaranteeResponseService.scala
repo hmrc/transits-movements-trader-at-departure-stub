@@ -41,7 +41,7 @@ import scala.math.BigDecimal.RoundingMode
 import scala.util.Random
 import scala.xml.NodeSeq
 
-class GuaranteeResponseService @Inject()(connector: GuaranteeTestSupportConnector)(implicit ec: ExecutionContext) {
+class GuaranteeResponseService @Inject() (connector: GuaranteeTestSupportConnector)(implicit ec: ExecutionContext) {
   private val NotMatchedErrorType: ErrorType  = ErrorType(12)
   private val InvalidDataErrorType: ErrorType = ErrorType(14)
 
@@ -113,13 +113,12 @@ class GuaranteeResponseService @Inject()(connector: GuaranteeTestSupportConnecto
       accessCode       = accessCodeNode.text
       accessCodeSuffix = accessCode.takeRight(3)
       response <- responseFromCode(accessCodeSuffix)
-    } yield
-      SimulatedGuaranteeResponse(
-        TaxIdentifier(taxIdentifier),
-        GuaranteeReference(guaranteeReference),
-        UniqueReference(origMessageReference),
-        response
-      )
+    } yield SimulatedGuaranteeResponse(
+      TaxIdentifier(taxIdentifier),
+      GuaranteeReference(guaranteeReference),
+      UniqueReference(origMessageReference),
+      response
+    )
 
   def simulateResponseTo(messageSender: MessageSender, message: NodeSeq)(implicit hc: HeaderCarrier): Future[Option[HttpResponse]] =
     buildSimulatedResponseFor(message)

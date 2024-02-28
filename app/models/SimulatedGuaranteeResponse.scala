@@ -30,6 +30,7 @@ case class SimulatedGuaranteeResponse(
 )
 
 object SimulatedGuaranteeResponse {
+
   implicit val simulatedGuaranteeResponseFormat: OFormat[SimulatedGuaranteeResponse] =
     Json.format[SimulatedGuaranteeResponse]
 }

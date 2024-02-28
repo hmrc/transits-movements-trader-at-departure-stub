@@ -55,16 +55,22 @@ class GuaranteeTestSupportConnectorSpec
         wireMockServer.stubFor(
           post(urlPathMatching("/balances/MDTP-GUA-[a-f0-9]{24}"))
             .willReturn(aResponse().withStatus(OK))
-            .withRequestBody(equalToJson(Json.stringify(Json.obj(
-              "taxIdentifier"            -> "GB12345678900",
-              "guaranteeReference"       -> "05DE3300BE0001067A001017",
-              "originalMessageReference" -> "7acb933dbe7039",
-              "response" -> Json.obj(
-                "status"   -> "SUCCESS",
-                "balance"  -> 12345678.9,
-                "currency" -> "GBP"
+            .withRequestBody(
+              equalToJson(
+                Json.stringify(
+                  Json.obj(
+                    "taxIdentifier"            -> "GB12345678900",
+                    "guaranteeReference"       -> "05DE3300BE0001067A001017",
+                    "originalMessageReference" -> "7acb933dbe7039",
+                    "response" -> Json.obj(
+                      "status"   -> "SUCCESS",
+                      "balance"  -> 12345678.9,
+                      "currency" -> "GBP"
+                    )
+                  )
+                )
               )
-            ))))
+            )
         )
 
         val simulatedResponse = SimulatedGuaranteeResponse(

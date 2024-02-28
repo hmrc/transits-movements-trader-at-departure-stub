@@ -36,7 +36,8 @@ trait GuaranteeTestSupportConnector {
 }
 
 @Singleton
-class GuaranteeTestSupportConnectorImpl @Inject()(appConfig: AppConfig, http: HttpClient)(implicit ec: ExecutionContext) extends GuaranteeTestSupportConnector {
+class GuaranteeTestSupportConnectorImpl @Inject() (appConfig: AppConfig, http: HttpClient)(implicit ec: ExecutionContext)
+    extends GuaranteeTestSupportConnector {
 
   def simulateResponse(messageSender: MessageSender, simulatedResponse: SimulatedGuaranteeResponse)(implicit hc: HeaderCarrier): Future[HttpResponse] = {
     val url = appConfig.guaranteeTestSupportUrl.addPathPart(messageSender.value)

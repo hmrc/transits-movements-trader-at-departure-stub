@@ -22,6 +22,7 @@ import scala.xml.NodeSeq
 import uk.gov.hmrc.http.HeaderCarrier
 
 case class FakeSimulatedResponseService(response: Option[HttpResponse]) extends SimulatedResponseService {
+
   override def simulateResponseTo(message: NodeSeq)(implicit hc: HeaderCarrier): Future[Option[HttpResponse]] =
     Future.successful(response)
 }

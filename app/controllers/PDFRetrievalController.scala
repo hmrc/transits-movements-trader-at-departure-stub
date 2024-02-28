@@ -22,7 +22,7 @@ import uk.gov.hmrc.play.bootstrap.backend.controller.BackendController
 import java.nio.file.{Files, Paths}
 import javax.inject.Inject
 
-class PDFRetrievalController @Inject()(cc: ControllerComponents) extends BackendController(cc) {
+class PDFRetrievalController @Inject() (cc: ControllerComponents) extends BackendController(cc) {
 
   def getAccompanyingDocument(departureId: Int): Action[AnyContent] =
     Action {
