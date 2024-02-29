@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 HM Revenue & Customs
+ * Copyright 2024 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,6 +22,7 @@ import scala.xml.NodeSeq
 import uk.gov.hmrc.http.HeaderCarrier
 
 case class FakeSimulatedResponseService(response: Option[HttpResponse]) extends SimulatedResponseService {
+
   override def simulateResponseTo(message: NodeSeq)(implicit hc: HeaderCarrier): Future[Option[HttpResponse]] =
     Future.successful(response)
 }

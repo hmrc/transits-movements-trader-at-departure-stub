@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 HM Revenue & Customs
+ * Copyright 2024 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,7 +22,7 @@ import com.google.inject.Inject
 import play.api.Environment
 import play.api.libs.json.{JsValue, Json}
 
-class JsonUtils @Inject()(environment: Environment) {
+class JsonUtils @Inject() (environment: Environment) {
 
   def readJsonFromFile(filePath: String): JsValue = {
     val jsonSchemaFile = environment.getExistingFile(filePath)

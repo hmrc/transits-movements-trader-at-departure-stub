@@ -2,15 +2,15 @@ import uk.gov.hmrc.sbtdistributables.SbtDistributablesPlugin
 
 val appName = "transits-movements-trader-at-departure-stub"
 
+ThisBuild / majorVersion := 0
+ThisBuild / scalaVersion := "2.13.12"
+
 lazy val microservice = Project(appName, file("."))
   .enablePlugins(play.sbt.PlayScala, SbtAutoBuildPlugin, SbtDistributablesPlugin)
   .disablePlugins(JUnitXmlReportPlugin)
-  .settings(SbtDistributablesPlugin.publishingSettings)
   .settings(inThisBuild(scalafmtOnCompile := true))
   .settings(scalacSettings)
   .settings(
-    majorVersion := 0,
-    scalaVersion := "2.12.14",
     resolvers += Resolver.jcenterRepo,
     PlayKeys.playDefaultPort := 9491,
     libraryDependencies ++= AppDependencies.compile ++ AppDependencies.test

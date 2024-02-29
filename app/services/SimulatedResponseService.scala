@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 HM Revenue & Customs
+ * Copyright 2024 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -30,7 +30,7 @@ trait SimulatedResponseService {
   def simulateResponseTo(message: NodeSeq)(implicit hc: HeaderCarrier): Future[Option[HttpResponse]]
 }
 
-class SimulatedResponseServiceImpl @Inject()(guarantee: GuaranteeResponseService) extends SimulatedResponseService {
+class SimulatedResponseServiceImpl @Inject() (guarantee: GuaranteeResponseService) extends SimulatedResponseService {
 
   def simulateResponseTo(message: NodeSeq)(implicit hc: HeaderCarrier): Future[Option[HttpResponse]] = {
     val messageSender = for {

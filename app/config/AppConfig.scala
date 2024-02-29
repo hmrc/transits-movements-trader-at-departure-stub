@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 HM Revenue & Customs
+ * Copyright 2024 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -23,7 +23,7 @@ import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
-class AppConfig @Inject()(config: Configuration) {
+class AppConfig @Inject() (config: Configuration) {
 
   lazy val guaranteeTestSupportUrl: AbsoluteUrl =
     config.get[Service]("microservice.services.guarantee-test-support").baseUrl

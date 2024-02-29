@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 HM Revenue & Customs
+ * Copyright 2024 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -36,7 +36,8 @@ trait GuaranteeTestSupportConnector {
 }
 
 @Singleton
-class GuaranteeTestSupportConnectorImpl @Inject()(appConfig: AppConfig, http: HttpClient)(implicit ec: ExecutionContext) extends GuaranteeTestSupportConnector {
+class GuaranteeTestSupportConnectorImpl @Inject() (appConfig: AppConfig, http: HttpClient)(implicit ec: ExecutionContext)
+    extends GuaranteeTestSupportConnector {
 
   def simulateResponse(messageSender: MessageSender, simulatedResponse: SimulatedGuaranteeResponse)(implicit hc: HeaderCarrier): Future[HttpResponse] = {
     val url = appConfig.guaranteeTestSupportUrl.addPathPart(messageSender.value)

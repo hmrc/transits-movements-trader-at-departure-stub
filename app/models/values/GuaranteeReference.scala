@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 HM Revenue & Customs
+ * Copyright 2024 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,6 +22,7 @@ import play.api.libs.json.Json
 case class GuaranteeReference(value: String) extends AnyVal
 
 object GuaranteeReference {
+
   implicit val guaranteeReferenceFormat: Format[GuaranteeReference] =
     Json.valueFormat[GuaranteeReference]
 }

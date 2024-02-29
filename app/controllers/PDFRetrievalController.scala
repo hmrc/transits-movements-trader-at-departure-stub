@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 HM Revenue & Customs
+ * Copyright 2024 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,7 +22,7 @@ import uk.gov.hmrc.play.bootstrap.backend.controller.BackendController
 import java.nio.file.{Files, Paths}
 import javax.inject.Inject
 
-class PDFRetrievalController @Inject()(cc: ControllerComponents) extends BackendController(cc) {
+class PDFRetrievalController @Inject() (cc: ControllerComponents) extends BackendController(cc) {
 
   def getAccompanyingDocument(departureId: Int): Action[AnyContent] =
     Action {
